@@ -1,57 +1,25 @@
-# Project Name
-
-(short, 1-3 sentenced, description of the project)
-
-## Features
-
-This project framework provides the following features:
-
-* Feature 1
-* Feature 2
-* ...
-
-## Getting Started
-
-### Prerequisites
-
-(ideally very short, if any)
-
-- OS
-- Library version
-- ...
+# Webapp with a cosmos Db
+ 
+ A sample webapp deployed on app service with cosmos db as backend. It counts the number of visitors visiting the page and inserts the same to a sample collection on cosmos db.
 
 ### Installation
 
-(ideally very short)
+1. In your terminal window, log into Azure and set the susbscription to the one that is whitelisted to use the load test service private preview:
 
-- npm install [package name]
-- mvn install
-- ...
+        az login
+        az account set -s mySubscriptionName
 
-### Quickstart
-(Add steps to get up and running quickly)
+2. Clone the sample application's source repository. The sample application is a Node.js app consisting of an Azure App Service web component and a Cosmos DB database. The also repo contains a PowerShell script that deploys the sample app to your Azure subscription, and a JMeter script that we'll use in subsequent steps.
 
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+        git clone https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git
 
+3. Deploy the sample app using the PowerShell script. (Tip: macOS users can install PowerShell [here](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
 
-## Demo
+        cd SampleApp
+        .\deploymentscript.ps1
 
-A demo app is included to show how to use the project.
+4. You will be prompted to supply a unique application name and a location (default is `eastus`).
 
-To run the demo, follow these steps:
+5. Once deployment is complete, browse to the running sample application with your browser.
 
-(Add steps to start up the demo)
-
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
+        https://<app_name>.azurewebsites.net

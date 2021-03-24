@@ -1,15 +1,15 @@
-# Webapp with a cosmos Db
+# WebApp with a Cosmos DB
  
- A sample webapp deployed on app service with cosmos db as backend. It counts the number of visitors visiting the page and inserts the same to a sample collection on cosmos db.
+ A sample webapp deployed on app service with cosmos db as database. It counts the number of visitors visiting the page and inserts the same into a sample collection in Cosmos DB.
 
 ### Installation
 
-1. In your terminal window, log into Azure and set the susbscription to the one that is allowlisted to use the load test service private preview:
+1. In your terminal window, log into Azure and set a susbscription(subscription which would contain the webapp) :
 
         az login
         az account set -s mySubscriptionName
 
-2. Clone the sample application's source repository. The sample application is a Node.js app consisting of an Azure App Service web component and a Cosmos DB database. The also repo contains a PowerShell script that deploys the sample app to your Azure subscription, and a JMeter script that we'll use in subsequent steps.
+2. Clone the sample application's source repository. The sample application is a Node.js app consisting of an Azure App Service web component and a Cosmos DB database. The repo also contains a PowerShell script that deploys the sample app to your Azure subscription.
 
         git clone https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git
 

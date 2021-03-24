@@ -1,4 +1,4 @@
-# WebApp with a Cosmos DB
+# WebApp with Cosmos DB
  
  A sample webapp deployed on app service with cosmos db as database. It counts the number of visitors visiting the page and inserts the same into a sample collection in Cosmos DB.
 

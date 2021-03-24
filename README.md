@@ -4,7 +4,7 @@
 
 ### Installation
 
-1. In your terminal window, log into Azure and set a susbscription(subscription which would contain the webapp) :
+1. In your terminal window, log into Azure and set a subscription(subscription which would contain the webapp) :
 
         az login
         az account set -s mySubscriptionName
@@ -18,8 +18,14 @@
         cd SampleApp
         .\deploymentscript.ps1
 
-4. You will be prompted to supply a unique application name and a location (default is `eastus`).
-
+4. You will be prompted to supply a unique application name and a location (default is `eastus`). A resource group for the resources would be created with the same name.
 5. Once deployment is complete, browse to the running sample application with your browser.
 
         https://<app_name>.azurewebsites.net
+## **Clean up resources**       
+
+You may want to delete the resources to avoid to continue incurring charges. Use the `az group delete` command to remove the resource group and all related resources.
+
+        az group delete --name myResourceGroup
+
+Similarly, you can utilize the **Delete resource group** toolbar button on the sample application's resource group to remove all the resources.

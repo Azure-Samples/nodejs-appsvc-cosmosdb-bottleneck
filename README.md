@@ -4,7 +4,7 @@
 
 ### Installation
 
-1. In your terminal window, log into Azure and set the susbscription to the one that is whitelisted to use the load test service private preview:
+1. In your terminal window, log into Azure and set the susbscription to the one that is allowlisted to use the load test service private preview:
 
         az login
         az account set -s mySubscriptionName

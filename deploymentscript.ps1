@@ -85,7 +85,7 @@ git commit -m "Initial commit"
 $a = git remote add azwebapp $publishConfig.scmUri
 git remote rm azwebapp 
 git remote add azwebapp $publishConfig.scmUri
-git push azwebapp master
+git push azwebapp main:master
 
 Write-Host "Deployment Complete"
 Write-Host "Open url https://$deploymentName.azurewebsites.net in the browser"

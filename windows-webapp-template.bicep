@@ -1,5 +1,5 @@
 
-param appName string = 'bottlenec'
+param appName string = 'bottleneck'
 
 param appNodeVersion string = '14.15.1'
 param phpVersion string = '7.1'
@@ -14,12 +14,10 @@ param databaseAccountLocation string =resourceGroup().location
 resource webApp 'Microsoft.Web/sites@2021-01-15' = {
   name: webAppName
   location: resourceGroup().location
-  identity: {
-    type: 'SystemAssigned'
-  }
-  /*tags: {
+  tags: {
+    //This looks nasty, but see here: https://github.com/Azure/bicep/issues/555
     'hidden-related:${hostingPlan.id}': 'empty'
-  }*/
+  }
   properties: {
     siteConfig: {
       appSettings: [
@@ -31,12 +29,38 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
           name: 'WEBSITE_NODE_DEFAULT_VERSION'
           value: appNodeVersion
         }
+        {
+          name: 'CONNECTION_STRING'
+          value: first(listConnectionStrings('Microsoft.DocumentDb/databaseAccounts/${databaseAccountId}', '2015-04-08').connectionStrings).connectionString
+        }
+        {
+          name: 'MSDEPLOY_RENAME_LOCKED_FILES'
+          value: '1'
+        }
       ]
       phpVersion: phpVersion
     }
     serverFarmId: hostingPlan.id
   }
 }
+output appUrl string = webApp.properties.defaultHostName
+output appName string =webApp.name
+
+/*
+resource codeDeploy 'Microsoft.Web/sourcecontrols@2018-11-01' = {
+  scope: webApp
+  name: 'web'
+  properties: {
+    RepoUrl: 'https://github.com/Gordonby/nodemongosampleapp.git'
+    branch: 'main'
+    publishRunbook: true
+    IsManualIntegration: true
+  }
+  dependsOn: [
+    webApp
+  ]
+}
+*/
 
 // resource webAppAppInsightsLink 'Microsoft.Web/sites/siteextensions@2021-01-15' = {
 //   parent: webApp
@@ -113,24 +137,14 @@ resource cosmosDbThroughput 'Microsoft.DocumentDB/databaseAccounts/mongodbDataba
   }
 }
 
-
-var cosmosDbRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'fbdf93bf-df7d-467e-a4d2-9458aa1360c8')
-resource cosmosWebAppRbac 'Microsoft.Authorization/roleAssignments@2021-04-01-preview' = {
-  name: guid( resourceGroup().id, webApp.name,cosmosDbRole)
-  properties: {
-    roleDefinitionId: cosmosDbRole
-    principalId: webApp.identity.principalId
-  }
- scope: cosmosDbAccount
-}
-
 resource AppInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: webAppName
   location: resourceGroup().location
   kind: 'web'
-  /*tags: {
+  tags: {
+    //This looks nasty, but see here: https://github.com/Azure/bicep/issues/555
     'hidden-link:${resourceGroup().id}/providers/Microsoft.Web/sites/${webAppName}': 'Resource'
-  }*/
+  }
   properties: {
     Application_Type: 'web'
     //applicationId: webAppName
@@ -153,6 +167,3 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2021-06-15' = {
     ]
   }
 }
-
-output azureCosmosDBAccountKeys object = listConnectionStrings('Microsoft.DocumentDb/databaseAccounts/${databaseAccountId}', '2015-04-08')
-output appUrl string = webApp.properties.defaultHostName

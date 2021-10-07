@@ -14,9 +14,7 @@ param databaseAccountId string = 'db-${appName}'
 param hostingPlanName string = 'plan-${appName}'
 
 
-param databaseAccountLocation string =resourceGroup().location
-
-//Making it unique
+//Making the name unique - if this fails, it's because the name is already taken (and you're really unlucky!)
 var webAppName = 'app-${appName}-${uniqueString(resourceGroup().id, appName)}'
 
 resource webApp 'Microsoft.Web/sites@2021-01-15' = {
@@ -39,7 +37,7 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
         }
         {
           name: 'CONNECTION_STRING'
-          value: first(listConnectionStrings('Microsoft.DocumentDb/databaseAccounts/${databaseAccountId}', '2015-04-08').connectionStrings).connectionString
+          value: cosmos.outputs.connstr
         }
         {
           name: 'MSDEPLOY_RENAME_LOCKED_FILES'
@@ -58,7 +56,8 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
 output appUrl string = webApp.properties.defaultHostName
 output appName string =webApp.name
 
-resource webAppConfig 'Microsoft.Web/sites/config@2021-01-15' = { 
+
+resource webAppConfig 'Microsoft.Web/sites/config@2019-08-01' = { 
   parent: webApp
   name: 'web'
   properties: {
@@ -66,15 +65,25 @@ resource webAppConfig 'Microsoft.Web/sites/config@2021-01-15' = {
   }
 }
 
-resource codeDeploy 'Microsoft.Web/sites/sourcecontrols@2021-01-15' = {
+resource webAppLogging 'Microsoft.Web/sites/config@2021-02-01' = {
   parent: webApp
-  name: 'web'
+  name: 'logs'
   properties: {
-    repoUrl:'https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git'
-    branch: 'main'
-    isManualIntegration: true
+    applicationLogs: {
+      fileSystem: {
+        level: 'Warning'
+      }
+    }
+    httpLogs: {
+      fileSystem: {
+        enabled: true
+        retentionInDays: 1
+        retentionInMb: 25
+      }
+    }
   }
 }
+
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   name: hostingPlanName
@@ -99,48 +108,6 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   }
 }
 
-resource cosmosDbDatabase 'Microsoft.DocumentDB/databaseAccounts/mongodbDatabases@2021-06-15' = {
-  parent: cosmosDbAccount
-  name: 'sampledatabase'
-  properties: {
-    resource: {
-      id: 'sampledatabase'
-    }
-  }
-}
-
-resource cosmosDbCollection 'Microsoft.DocumentDB/databaseAccounts/mongodbDatabases/collections@2021-06-15' = {
-  parent: cosmosDbDatabase
-  name: 'samplecollection'
-  properties: {
-    resource: {
-      id: 'samplecollection'
-      shardKey: {
-        user_id: 'Hash'
-      }
-      indexes: [
-        {
-          key: {
-            keys: [
-              '_id'
-            ]
-          }
-        }
-      ]
-    }
-  }
-}
-
-resource cosmosDbThroughput 'Microsoft.DocumentDB/databaseAccounts/mongodbDatabases/collections/throughputSettings@2021-06-15' = {
-  parent: cosmosDbCollection
-  name: 'default'
-  properties: {
-    resource: {
-      throughput: 400
-    }
-  }
-}
-
 resource AppInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: webAppName
   location: resourceGroup().location
@@ -154,18 +121,21 @@ resource AppInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2021-06-15' = {
-  kind: 'MongoDB'
-  name: databaseAccountId
-  location: databaseAccountLocation
+resource codeDeploy 'Microsoft.Web/sites/sourcecontrols@2021-01-15' = {
+  parent: webApp
+  name: 'web'
   properties: {
-    databaseAccountOfferType: 'Standard'
-    locations: [
-      {
-        locationName: '${resourceGroup().location}'
-        failoverPriority:0
-        isZoneRedundant: false
-      }
-    ]
+    repoUrl:'https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git'
+    branch: 'main'
+    isManualIntegration: true
+  }
+}
+
+//Using the latest api versions to deploy Cosmos actually stops the app code from working. So at least for the time being, it's going to just use the old API versions to create the MongoDb in CosmosDb.
+//module costos 'cosmos2021.bicep' = { 
+module cosmos 'cosmosRustic.bicep' = {
+  name: 'cosmosDb'
+  params: {
+    databaseAccountId: databaseAccountId
   }
 }

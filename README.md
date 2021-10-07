@@ -13,15 +13,15 @@
 
         git clone https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git
 
-3. Deploy the sample app using the PowerShell script. (Tip: macOS users can install PowerShell [here](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
+3. Open .\deploymentscript.ps1 and inspect the default resource group and deployment name. This resource group and associated resources will be created in you Azure subscription in the next step.
+
+4. Deploy the sample app using the PowerShell script. (Tip: macOS users can install PowerShell [here](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1)) 
 
         cd SampleApp
         .\deploymentscript.ps1
 
-4. You will be prompted to supply a unique application name and a location (default is `eastus`). A resource group for the resources would be created with the same name.
-5. Once deployment is complete, browse to the running sample application with your browser.
+5. Once deployment is complete, it will output the domain name of your web app as well as opening a browser and navigating to the app.
 
-        https://<app_name>.azurewebsites.net
 ## **Clean up resources**       
 
 You may want to delete the resources to avoid to continue incurring charges. Use the `az group delete` command to remove the resource group and all related resources.

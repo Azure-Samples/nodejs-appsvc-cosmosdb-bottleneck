@@ -15,6 +15,7 @@ $appName=$deploymentOutputs.properties.outputs.appName.value
 $appUrl=$deploymentOutputs.properties.outputs.appUrl.value
 
 Write-Output "Deployment of $appName Complete"
+Write-Output "Domain: $appUrl"
 Start-Process("https://$appUrl")
 
 Write-Output "To delete the app, run command 'az group delete --name $resourceGroup'"

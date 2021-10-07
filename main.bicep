@@ -32,6 +32,14 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
           value: AppInsights.properties.InstrumentationKey
         }
         {
+          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
+          value: '~2'
+        }
+        {
+          name: 'XDT_MicrosoftApplicationInsights_Mode'
+          value: 'default'
+        }
+        {
           name: 'WEBSITE_NODE_DEFAULT_VERSION'
           value: appNodeVersion
         }
@@ -54,7 +62,7 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
   }
 }
 output appUrl string = webApp.properties.defaultHostName
-output appName string =webApp.name
+output appName string = webApp.name
 
 
 resource webAppConfig 'Microsoft.Web/sites/config@2019-08-01' = { 
@@ -83,6 +91,8 @@ resource webAppLogging 'Microsoft.Web/sites/config@2021-02-01' = {
     }
   }
 }
+
+
 
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
@@ -118,6 +128,7 @@ resource AppInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
   properties: {
     Application_Type: 'web'
+    Request_Source: 'AzureTfsExtensionAzureProject'
   }
 }
 

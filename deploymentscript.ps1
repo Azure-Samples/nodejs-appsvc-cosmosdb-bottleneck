@@ -64,7 +64,7 @@ az group create --location $location --name $resourceGroup --subscription $selec
 $databaseName = $deploymentName + "db"
 
 Write-Host "Deploying Sample application.. (this might take a few minutes)"
-$deploymentOutputs = az deployment group create --resource-group $resourceGroup --subscription $selectedSubscription --mode Incremental --template-file ./windows-webapp-template.json --parameters "webAppName=$deploymentName" --parameters "hostingPlanName=$deploymentName-host" --parameters "appInsightsLocation=$location" --parameters "databaseAccountId=$databaseName" --parameters "databaseAccountLocation=$location"
+$deploymentOutputs = az deployment group create --resource-group $resourceGroup --subscription $selectedSubscription --mode Incremental --template-file ./windows-webapp-template.json --parameters "webAppName=$deploymentName" --parameters "hostingPlanName=$deploymentName-host" --parameters "appInsightsLocation=$location" --parameters "databaseAccountId=$databaseName" --parameters "databaseAccountLocation=$location" -o json
 $deploymentOutputs = $deploymentOutputs | ConvertFrom-Json
 $connectionString = $deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value.connectionStrings[0].connectionString
 
@@ -74,7 +74,7 @@ $setConnectionString = az webapp config appsettings set --name $deploymentName -
 Write-Host "Setting app setting for App Service"
 $setAppSettings = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings MSDEPLOY_RENAME_LOCKED_FILES=1
 
-$publishConfig = az webapp deployment list-publishing-credentials --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription | ConvertFrom-Json
+$publishConfig = az webapp deployment list-publishing-credentials --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription -o json | ConvertFrom-Json
 
 Write-Host "Publishing sample app.. (this might take a minute or two)"
 git init

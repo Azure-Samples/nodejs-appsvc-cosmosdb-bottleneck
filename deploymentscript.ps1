@@ -1,6 +1,6 @@
 ﻿$resourceGroup = "rg-bottleneck"
 $deploymentName = "bottleneck"
-$location = "westeurope"
+$location = "eastus"
 
 
 Write-Output "Creating resource group " $resourceGroup

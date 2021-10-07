@@ -13,8 +13,8 @@
 $ErrorActionPreference = "Stop"
 [Console]::ResetColor()
 # az login --use-device-code
-$output = az account show | ConvertFrom-Json
-$subscriptionList = az account list | ConvertFrom-Json 
+$output = az account show -o json | ConvertFrom-Json
+$subscriptionList = az account list -o json | ConvertFrom-Json 
 $subscriptionList | Format-Table name, id, tenantId -AutoSize
 $selectedSubscription = $output.name
 Write-Host "Currently logged in to subscription """$output.name.Trim()""" in tenant " $output.tenantId

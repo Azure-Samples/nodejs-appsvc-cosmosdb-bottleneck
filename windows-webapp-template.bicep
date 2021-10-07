@@ -1,15 +1,23 @@
-
+@description('The name seed for your application. Check outputs for the actual name and url')
 param appName string = 'bottleneck'
 
+@description('Version of node')
 param appNodeVersion string = '14.15.1'
+
+@description('Version of php')
 param phpVersion string = '7.1'
 
-var webAppName = 'app-${appName}-${uniqueString(resourceGroup().id, appName)}'
+@description('Name of the CosmosDb Account')
+param databaseAccountId string = 'db-${appName}'
 
-var databaseAccountId = 'db-${appName}'
-var hostingPlanName = 'plan-${appName}'
+@description('Name of the web app host plan')
+param hostingPlanName string = 'plan-${appName}'
+
 
 param databaseAccountLocation string =resourceGroup().location
+
+//Making it unique
+var webAppName = 'app-${appName}-${uniqueString(resourceGroup().id, appName)}'
 
 resource webApp 'Microsoft.Web/sites@2021-01-15' = {
   name: webAppName
@@ -37,6 +45,10 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
           name: 'MSDEPLOY_RENAME_LOCKED_FILES'
           value: '1'
         }
+        {
+          name:'SCM_DO_BUILD_DURING_DEPLOYMENT'
+          value: 'true'
+        } //For use if you're doing a zip deploy and need build
       ]
       phpVersion: phpVersion
     }
@@ -46,26 +58,23 @@ resource webApp 'Microsoft.Web/sites@2021-01-15' = {
 output appUrl string = webApp.properties.defaultHostName
 output appName string =webApp.name
 
-/*
-resource codeDeploy 'Microsoft.Web/sourcecontrols@2018-11-01' = {
-  scope: webApp
+resource webAppConfig 'Microsoft.Web/sites/config@2021-01-15' = { 
+  parent: webApp
   name: 'web'
   properties: {
-    RepoUrl: 'https://github.com/Gordonby/nodemongosampleapp.git'
-    branch: 'main'
-    publishRunbook: true
-    IsManualIntegration: true
+    scmType: 'ExternalGit'
   }
-  dependsOn: [
-    webApp
-  ]
 }
-*/
 
-// resource webAppAppInsightsLink 'Microsoft.Web/sites/siteextensions@2021-01-15' = {
-//   parent: webApp
-//   name: 'Microsoft.ApplicationInsights.AzureWebSites'
-// }
+resource codeDeploy 'Microsoft.Web/sites/sourcecontrols@2021-01-15' = {
+  parent: webApp
+  name: 'web'
+  properties: {
+    repoUrl:'https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git'
+    branch: 'main'
+    isManualIntegration: true
+  }
+}
 
 resource hostingPlan 'Microsoft.Web/serverfarms@2021-01-15' = {
   name: hostingPlanName
@@ -96,11 +105,6 @@ resource cosmosDbDatabase 'Microsoft.DocumentDB/databaseAccounts/mongodbDatabase
   properties: {
     resource: {
       id: 'sampledatabase'
-    }
-    options: {
-      //autoscaleSettings: {
-      //  maxThroughput: autoscaleMaxThroughput
-      //}
     }
   }
 }
@@ -147,8 +151,6 @@ resource AppInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
   properties: {
     Application_Type: 'web'
-    //applicationId: webAppName
-    //Request_Source: 'AzureTfsExtensionAzureProject'
   }
 }
 

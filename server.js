@@ -14,6 +14,7 @@ var server = http.createServer(function (req, res) {
     console.log(process.env.SECRET_VALUE);
     if(req.headers['x-secret'] != process.env.SECRET_VALUE) {
         res.writeHead(403, "Unauthorized");
+        res.end();
         return;
     }
 

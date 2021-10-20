@@ -78,7 +78,7 @@ $deploymentOutputs = $deploymentOutputs | ConvertFrom-Json
 $connectionString = $deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value.connectionStrings[0].connectionString
 
 Write-Host "Setting connection string to cosmos db"
-$setConnectionString = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings CONNECTION_STRING="$connectionString" SECRET_VALUE="$randomStringSecret"
+$setConnectionString = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings "CONNECTION_STRING=`"$connectionString\`"" "SECRET_VALUE=`"$randomStringSecret`""
 
 Write-Host "Setting app setting for App Service"
 $setAppSettings = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings MSDEPLOY_RENAME_LOCKED_FILES=1

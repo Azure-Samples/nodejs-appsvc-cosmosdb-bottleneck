@@ -58,10 +58,19 @@ if([string]::IsNullOrWhiteSpace($location)) {
     $location = "eastus"
 }
 
+$randomStringSecret = Get-Random
+
 $resourceGroup = $deploymentName + "-rg"
+$keyVault = $deploymentName.Substring(0, 12) + "kv"
+
 Write-Host "Creating resource group " $resourceGroup
 az group create --location $location --name $resourceGroup --subscription $selectedSubscription
 $databaseName = $deploymentName + "db"
+
+Write-Host "Creating Key Vault " $keyVault
+az keyvault create --location $location --subscription $selectedSubscription --resource-group $resourceGroup --name $keyVault
+az keyvault secret set --name "secret" --vault-name $keyVault --value "$randomStringSecret"
+
 
 Write-Host "Deploying Sample application.. (this might take a few minutes)"
 $deploymentOutputs = az deployment group create --resource-group $resourceGroup --subscription $selectedSubscription --mode Incremental --template-file ./windows-webapp-template.json --parameters "webAppName=$deploymentName" --parameters "hostingPlanName=$deploymentName-host" --parameters "appInsightsLocation=$location" --parameters "databaseAccountId=$databaseName" --parameters "databaseAccountLocation=$location" -o json
@@ -69,7 +78,7 @@ $deploymentOutputs = $deploymentOutputs | ConvertFrom-Json
 $connectionString = $deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value.connectionStrings[0].connectionString
 
 Write-Host "Setting connection string to cosmos db"
-$setConnectionString = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings CONNECTION_STRING="$connectionString"
+$setConnectionString = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings CONNECTION_STRING="$connectionString" SECRET_VALUE="$randomStringSecret"
 
 Write-Host "Setting app setting for App Service"
 $setAppSettings = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings MSDEPLOY_RENAME_LOCKED_FILES=1
@@ -85,7 +94,7 @@ git commit -m "Initial commit"
 $a = git remote add azwebapp $publishConfig.scmUri
 git remote rm azwebapp 
 git remote add azwebapp $publishConfig.scmUri
-git push azwebapp main:master
+git push azwebapp SecretsFeature:master
 
 Write-Host "Deployment Complete"
 Write-Host "Open url https://$deploymentName.azurewebsites.net in the browser"

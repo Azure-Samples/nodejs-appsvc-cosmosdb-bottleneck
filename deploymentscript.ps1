@@ -48,6 +48,7 @@ while($true) {
     if($HTTP_Status -eq 0) {
         break
     } else {
+        break
         Write-Host "Webapp name taken"
     }
 }
@@ -66,7 +67,7 @@ $databaseName = $deploymentName + "db"
 Write-Host "Deploying Sample application.. (this might take a few minutes)"
 $deploymentOutputs = az deployment group create --resource-group $resourceGroup --subscription $selectedSubscription --mode Incremental --template-file ./windows-webapp-template.json --parameters "webAppName=$deploymentName" --parameters "hostingPlanName=$deploymentName-host" --parameters "appInsightsLocation=$location" --parameters "databaseAccountId=$databaseName" --parameters "databaseAccountLocation=$location" -o json
 $deploymentOutputs = $deploymentOutputs | ConvertFrom-Json
-$connectionString = $deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value.connectionStrings[0].connectionString
+[String]$connectionString = ($deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value.connectionStrings[0].connectionString).ToString()
 
 Write-Host "Setting connection string to cosmos db"
 $setConnectionString = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings CONNECTION_STRING="$connectionString"

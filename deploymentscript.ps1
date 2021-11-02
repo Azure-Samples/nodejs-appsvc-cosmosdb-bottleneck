@@ -48,7 +48,6 @@ while($true) {
     if($HTTP_Status -eq 0) {
         break
     } else {
-        break
         Write-Host "Webapp name taken"
     }
 }

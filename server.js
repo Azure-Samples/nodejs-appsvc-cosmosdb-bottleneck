@@ -6,6 +6,7 @@ var fs = require('fs');
 var port = process.env.PORT || 8092;
 var dbOperations = require('./databaseOperations.js');
 var utils = require('./utils.js');
+var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 
 var lastTimestamp = 0;
@@ -14,6 +15,15 @@ var server = http.createServer(function (req, res) {
     var method = req.method.toLowerCase();
     
     if(!reqUrl || (!!reqUrl && (reqUrl == "" || reqUrl.toLowerCase() == "index.html"))){
+        if(config.enableSecretsFeature) {
+            console.log(req.headers['x-secret']);
+            console.log(process.env.SECRET_VALUE);
+            if(req.headers['x-secret'] != process.env.SECRET_VALUE) {
+                res.writeHead(403, "Unauthorized");
+                res.end();
+                return;
+            }
+        }
         var data = fs.readFileSync('index.html');
         
         dbOperations.queryCount(function (visitCount){

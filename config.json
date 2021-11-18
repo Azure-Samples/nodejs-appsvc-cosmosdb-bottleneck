@@ -1,0 +1,4 @@
+{
+    "enableSecretsFeature": false,
+    "secretHeaderValue": "secretvalue"
+}

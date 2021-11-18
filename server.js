@@ -19,7 +19,7 @@ var server = http.createServer(function (req, res) {
             console.log(req.headers['x-secret']);
             console.log(config.secretHeaderValue);
             if(req.headers['x-secret'] != config.secretHeaderValue) {
-                res.writeHead(403, "Unauthorized");
+                res.writeHead(401, "Unauthorized");
                 res.end();
                 return;
             }

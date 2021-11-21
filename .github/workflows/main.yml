@@ -55,7 +55,7 @@ jobs:
             az group create --name "${{ env.AZURE_WEBAPP_NAME }}-rg" --location "${{ env.LOCATION }}"
             $deploymentOutputs = az deployment group create --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --mode Incremental --template-file ./windows-webapp-template.json --parameters webAppName="${{ env.AZURE_WEBAPP_NAME }}" --parameters hostingPlanName="${{ env.AZURE_WEBAPP_NAME }}-host" --parameters appInsightsLocation="${{ env.APPINSIGHTLOCATION }}" --parameters databaseAccountId="${{ env.AZURE_WEBAPP_NAME }}db" --parameters databaseAccountLocation="${{ env.DATABASEACCOUNTLOCATION }}" -o json
             $deploymentOutputs = $deploymentOutputs | ConvertFrom-Json
-            $connectionString = [String]$deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value -replace '&','^^^&'
+            $connectionString = [String]$deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value
             $setConnectionString = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings CONNECTION_STRING="$connectionString"
             $setAppSettings = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings MSDEPLOY_RENAME_LOCKED_FILES=1
           azPSVersion: "latest"

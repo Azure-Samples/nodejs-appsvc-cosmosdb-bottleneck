@@ -79,6 +79,7 @@ stages:
         targetType: 'inline'
         script: |
           $deploymentOutput=(ConvertFrom-Json '$(deploymentOutputs)')
+          Write-Host 'Value of connection string' $deploymentOutput
           $connectionStringValue= $deploymentOutput.properties.outputs.azureCosmosDBAccountKeys.value
           Write-Host 'Value of connection string' $connectionStringValue
           Write-Host "##vso[task.setvariable variable=connectionString;issecret=true;]$connectionStringValue"

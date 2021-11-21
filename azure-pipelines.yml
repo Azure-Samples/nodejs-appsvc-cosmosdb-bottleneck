@@ -106,21 +106,21 @@ stages:
       inputs:
         artifact: drop
 
-    # - task: AzureRmWebAppDeployment@4
-    #   inputs:
-    #     ConnectionType: 'AzureRM'
-    #     azureSubscription: $(serviceConnection)
-    #     appType: 'webApp'
-    #     WebAppName: $(webAppName)
-    #     packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
-    #     enableCustomDeployment: true
-    #     DeploymentType: 'zipDeploy'
-    #     TakeAppOfflineFlag: false
-    
-    - task: AzureWebApp@1
+    - task: AzureRmWebAppDeployment@4
       inputs:
-        azureSubscription: '$(serviceConnection)'
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(serviceConnection)
         appType: 'webApp'
-        appName: $(webAppName)
-        package: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
-        deploymentMethod: 'auto'
+        WebAppName: $(webAppName)
+        packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+        # enableCustomDeployment: true
+        # DeploymentType: 'zipDeploy'
+        # TakeAppOfflineFlag: false
+
+    # - task: AzureWebApp@1
+    #   inputs:
+    #     azureSubscription: '$(serviceConnection)'
+    #     appType: 'webApp'
+    #     appName: $(webAppName)
+    #     package: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+    #     deploymentMethod: 'auto'

@@ -80,6 +80,7 @@ stages:
         script: |
           $deploymentOutput=(ConvertFrom-Json '$(deploymentOutputs)')
           $connectionStringValue= $deploymentOutput.properties.outputs.azureCosmosDBAccountKeys.value
+          Write-Host 'Value of connection string' $connectionStringValue
           Write-Host "##vso[task.setvariable variable=connectionString;issecret=true;]$connectionStringValue"
 
     - task: AzureAppServiceSettings@1

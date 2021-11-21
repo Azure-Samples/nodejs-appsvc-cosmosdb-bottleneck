@@ -72,14 +72,14 @@ stages:
         csmFile: '$(System.DefaultWorkingDirectory)/windows-webapp-template.json'
         overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName)-host -appInsightsLocation "East US" -databaseAccountId $(webAppName)db -databaseAccountLocation "East US"'
         deploymentMode: 'Incremental'
-        deploymentOutputs: 'deploymentOutputs'
+        deploymentOutputs: 'output'
     
     - task: PowerShell@2
       inputs:
         targetType: 'inline'
         script: |
-          $deploymentOutput=(ConvertFrom-Json '$(deploymentOutputs)')
-          Write-Host 'Value of deploymentOutput' $deploymentOutputs
+          $deploymentOutput=(ConvertFrom-Json '$(output)')
+          Write-Host 'Value of deploymentOutput' $deploymentOutput
           $connectionStringValue= $deploymentOutput.properties.outputs.azureCosmosDBAccountKeys.value
           Write-Host 'Value of connectionStringValue' $connectionStringValue
           Write-Host "##vso[task.setvariable variable=connectionString;issecret=true;]$connectionStringValue"

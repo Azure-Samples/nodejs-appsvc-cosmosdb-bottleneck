@@ -71,10 +71,10 @@
             "name": "[parameters('hostingPlanName')]",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "P2v3",
-                "tier": "PremiumV3",
-                "size": "P2v3",
-                "family": "Pv3",
+                "name": "P1v2",
+                "tier": "PremiumV2",
+                "size": "P1v2",
+                "family": "Pv2",
                 "capacity": 1
             },
             "kind": "app",

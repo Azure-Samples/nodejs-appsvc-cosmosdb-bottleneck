@@ -18,41 +18,41 @@ variables:
 
 
 stages:
-# - stage: Build
-#   displayName: Build 
-#   jobs:
-#   - job: Build
-#     displayName: Build
-#     pool:
-#       vmImage: windows-latest
+- stage: Build
+  displayName: Build 
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: windows-latest
 
-#     steps:
-#     - task: NodeTool@0
-#       inputs:
-#         versionSpec: '14.15.1'
-#       displayName: 'Install Node.js'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '14.15.1'
+      displayName: 'Install Node.js'
 
-#     - script: |
-#         npm install
-#         npm run build
-#       displayName: 'npm install and build'
+    - script: |
+        npm install
+        npm run build
+      displayName: 'npm install and build'
 
-    # - task: ArchiveFiles@2
-    #   displayName: 'Archive files'
-    #   inputs:
-    #     rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-    #     includeRootFolder: false
-    #     archiveType: zip
-    #     archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-    #     replaceExistingArchive: true
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
 
-    # - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-    #   artifact: drop
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
 
 - stage: Deploy
   displayName: Deploy 
-  # dependsOn: Build
-  # condition: succeeded()
+  dependsOn: Build
+  condition: succeeded()
   jobs:
   - job: Deploy
     displayName: Deploy
@@ -102,17 +102,17 @@ stages:
              }             
           ]
 
-    # - task: DownloadPipelineArtifact@2
-    #   inputs:
-    #     artifact: drop
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: drop
 
-    # - task: AzureRmWebAppDeployment@4
-    #   inputs:
-    #     ConnectionType: 'AzureRM'
-    #     azureSubscription: $(serviceConnection)
-    #     appType: 'webApp'
-    #     WebAppName: $(webAppName)
-    #     packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
-    #     enableCustomDeployment: true
-    #     DeploymentType: 'zipDeploy'
-    #     TakeAppOfflineFlag: false
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(serviceConnection)
+        appType: 'webApp'
+        WebAppName: $(webAppName)
+        packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+        enableCustomDeployment: true
+        DeploymentType: 'zipDeploy'
+        TakeAppOfflineFlag: false

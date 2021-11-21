@@ -1,0 +1,67 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Sample App deploy
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+
+env:
+  AZURE_WEBAPP_NAME: "gh-sampleapp"    # set this to your application's name
+  LOAD_TEST_RESOURCE: "<Name of your load test resource>"
+  LOAD_TEST_RESOURCE_GROUP: "<Name of your load test resource group>"
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '14.15.1'                # set this to the node version to use
+  LOCATION: "East US"
+  APPINSIGHTLOCATION: "East US"
+  DATABASEACCOUNTLOCATION: "eastus"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-and-deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout GitHub Actions 
+        uses: actions/checkout@v2
+        
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: npm install and build
+        continue-on-error: false
+        run: |
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+  
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+    # Deploy Arm template
+      - name: Deploy ARM Template
+        uses: azure/powershell@v1
+        continue-on-error: false
+        with:
+          inlineScript: |
+            az group create --name "${{ env.AZURE_WEBAPP_NAME }}-rg" --location "${{ env.LOCATION }}"
+            $deploymentOutputs = az deployment group create --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --mode Incremental --template-file ./windows-webapp-template.json --parameters webAppName="${{ env.AZURE_WEBAPP_NAME }}" --parameters hostingPlanName="${{ env.AZURE_WEBAPP_NAME }}-host" --parameters appInsightsLocation="${{ env.APPINSIGHTLOCATION }}" --parameters databaseAccountId="${{ env.AZURE_WEBAPP_NAME }}db" --parameters databaseAccountLocation="${{ env.DATABASEACCOUNTLOCATION }}" -o json
+            $deploymentOutputs = $deploymentOutputs | ConvertFrom-Json
+            $connectionString = [String]$deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value -replace '&','^^^&'
+            $setConnectionString = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings CONNECTION_STRING="$connectionString"
+            $setAppSettings = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings MSDEPLOY_RENAME_LOCKED_FILES=1
+          azPSVersion: "latest"
+          
+      - name: 'Deploy to Azure WebApp'
+        uses: azure/webapps-deploy@v2
+        with: 
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}

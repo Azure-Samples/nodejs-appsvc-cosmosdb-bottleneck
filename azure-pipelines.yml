@@ -78,7 +78,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          $deploymentOutput=(ConvertFrom-Json '$(output)')
+          $deploymentOutput=(ConvertFrom-Json $(output))
           Write-Host 'Value of deploymentOutput' $deploymentOutput
           $connectionStringValue= $deploymentOutput.properties.outputs.azureCosmosDBAccountKeys.value
           Write-Host 'Value of connectionStringValue' $connectionStringValue

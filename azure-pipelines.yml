@@ -104,3 +104,14 @@ stages:
     # - task: DownloadPipelineArtifact@2
     #   inputs:
     #     artifact: drop
+
+    # - task: AzureRmWebAppDeployment@4
+    #   inputs:
+    #     ConnectionType: 'AzureRM'
+    #     azureSubscription: $(serviceConnection)
+    #     appType: 'webApp'
+    #     WebAppName: $(webAppName)
+    #     packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+    #     enableCustomDeployment: true
+    #     DeploymentType: 'zipDeploy'
+    #     TakeAppOfflineFlag: false

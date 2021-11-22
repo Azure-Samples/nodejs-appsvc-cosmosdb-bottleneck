@@ -102,8 +102,8 @@ stages:
              },
              {
               "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-              "value": 1,
-              "slotSetting": true
+              "value": true,
+              "slotSetting": false
              }
           ]
 

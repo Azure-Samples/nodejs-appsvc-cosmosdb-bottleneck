@@ -1,4 +1,4 @@
 {
-    "enableSecretsFeature": false,
+    "enableSecretsFeature": true,
     "secretHeaderValue": "1797669089"
 }

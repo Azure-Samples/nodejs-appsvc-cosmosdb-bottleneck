@@ -99,7 +99,12 @@ stages:
               "name": "MSDEPLOY_RENAME_LOCKED_FILES",
               "value": 1,
               "slotSetting": false
-             }             
+             }
+             {
+              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+              "value": 1,
+              "slotSetting": true
+             }
           ]
 
     - task: DownloadPipelineArtifact@2
@@ -113,8 +118,8 @@ stages:
         appType: 'webApp'
         WebAppName: $(webAppName)
         packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
-        ScriptType: 'Inline Script'
-        InlineScript: 'npm start'
+        # ScriptType: 'Inline Script'
+        # InlineScript: 'npm start'
         # enableCustomDeployment: true
         # DeploymentType: 'zipDeploy'
         # TakeAppOfflineFlag: false

@@ -3,15 +3,16 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-trigger: none
+trigger:
+- main
 
 pool:
   vmImage: ubuntu-latest
 
 variables:
-  webAppName: 'adonew-sampleapp'
-  serviceConnection: 'Cloud-Native-Testing-IDC-Test(7c71b563-0dc0-4bc0-bcf6-06f8f0516c7a)'
-  azureSubscriptionId: '7c71b563-0dc0-4bc0-bcf6-06f8f0516c7a'
+  webAppName: '<Name of your webapp>'
+  serviceConnection: '<Name of your webARM Service connection>'
+  azureSubscriptionId: '<Azure subscriptionId>'
   loadTestResource: '<Name of your load test resource>'
   loadTestResourceGroup: '<Name of your load test resource group>'
   location: 'EAST US'
@@ -80,7 +81,6 @@ stages:
         script: |
           $deploymentOutput= ConvertFrom-Json '$(output)'
           $connectionStringValue= $deploymentOutput.azureCosmosDBAccountKeys.value
-          Write-Host "Value of connectionStringValue $connectionStringValue"
           Write-Host "##vso[task.setvariable variable=connectionString;issecret=true;]$connectionStringValue"
 
     - task: AzureAppServiceSettings@1
@@ -120,14 +120,36 @@ stages:
         packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
         ScriptType: 'Inline Script'
         InlineScript: 'npm install'
-        # enableCustomDeployment: true
-        # DeploymentType: 'zipDeploy'
-        # TakeAppOfflineFlag: false
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: drop
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(serviceConnection)
+        appType: 'webApp'
+        WebAppName: $(webAppName)
+        packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+        enableCustomDeployment: true
+        DeploymentType: 'zipDeploy'
+        TakeAppOfflineFlag: false
 
-    # - task: AzureWebApp@1
-    #   inputs:
-    #     azureSubscription: '$(serviceConnection)'
-    #     appType: 'webApp'
-    #     appName: $(webAppName)
-    #     package: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
-    #     deploymentMethod: 'auto'
+- stage: LoadTest
+  displayName: Load Test
+  dependsOn: Deploy
+  condition: succeeded()
+  jobs:
+  - job: LoadTest
+    displayName: Load Test
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureLoadTest@1
+      inputs:
+        azureSubscription: $(serviceConnection)
+        loadTestConfigFile: 'SampleApp.yaml'
+        resourceGroup: $(loadTestResourceGroup)
+        loadTestResource: $(loadTestResource)
+
+    - publish: $(System.DefaultWorkingDirectory)/loadTest
+      artifact: results

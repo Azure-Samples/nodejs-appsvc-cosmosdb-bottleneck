@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: "ninallam-ghapp"    # set this to your application's name
+  AZURE_WEBAPP_NAME: "<Name of your webapp>"    # set this to your application's name
   LOAD_TEST_RESOURCE: "<Name of your load test resource>"
   LOAD_TEST_RESOURCE_GROUP: "<Name of your load test resource group>"
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
@@ -67,3 +67,28 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
+  loadTest:
+    name: Load Test
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Actions 
+        uses: actions/checkout@v2
+          
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        with:
+          loadTestConfigFile: 'SampleApp.yaml'
+          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
+          resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+      
+      - uses: actions/upload-artifact@v2
+        with:
+          name: loadTestResults
+          path: ${{ github.workspace }}/loadTest

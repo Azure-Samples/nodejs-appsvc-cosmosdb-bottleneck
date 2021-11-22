@@ -9,7 +9,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  webAppName: 'ado-sampleapp'
+  webAppName: 'adonew-sampleapp'
   serviceConnection: 'Cloud-Native-Testing-IDC-Test(7c71b563-0dc0-4bc0-bcf6-06f8f0516c7a)'
   azureSubscriptionId: '7c71b563-0dc0-4bc0-bcf6-06f8f0516c7a'
   loadTestResource: '<Name of your load test resource>'

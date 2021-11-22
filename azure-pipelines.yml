@@ -99,7 +99,7 @@ stages:
               "name": "MSDEPLOY_RENAME_LOCKED_FILES",
               "value": 1,
               "slotSetting": false
-             }
+             },
              {
               "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
               "value": 1,

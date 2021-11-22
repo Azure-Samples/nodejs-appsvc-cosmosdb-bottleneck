@@ -119,7 +119,7 @@ stages:
         WebAppName: $(webAppName)
         packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
         ScriptType: 'Inline Script'
-        InlineScript: 'npm start &'
+        InlineScript: 'npm install'
         # enableCustomDeployment: true
         # DeploymentType: 'zipDeploy'
         # TakeAppOfflineFlag: false

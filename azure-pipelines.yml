@@ -113,6 +113,7 @@ stages:
         appType: 'webApp'
         WebAppName: $(webAppName)
         packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+        StartupCommand: 'npm start'
         # enableCustomDeployment: true
         # DeploymentType: 'zipDeploy'
         # TakeAppOfflineFlag: false

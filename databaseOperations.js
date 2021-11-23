@@ -4,49 +4,19 @@ var obj = JSON.parse(fs.readFileSync('connectionData.json', 'utf8'));
 var DbConnection = require('./db');
 
 var connectionString = "mongodb://account:key@account.documents.azure.com:10255/?ssl=true";
-if(process.env.NODE_ENV == "production"){
-    var connectionString = process.env.CONNECTION_STRING;
-    var stringSplit1 = connectionString.split("://")[1];
-    var stringSplit2 = stringSplit1.split('@');
-    var userNamePassword = stringSplit2[0];
-    userNamePassword = userNamePassword.split(':');
-    var userName = userNamePassword[0];
-    var password = userNamePassword[1];
-    var databaseName = obj.databaseName;
-    var collectionName = obj.collectionName;
-    connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : ""));
-}
-else{
-    MongoClient =  {
-        connect: function(connectionString, options, callback){
-            var client = {
-                db: function(databaseName){
-                    var testDB = {
-                        collection: function(collectionName){
-                            var testCollection = {
-                                count: function(callback){
-                                    callback(null, "unittest");
-                                },
-                                insertMany: function(items, callback){
-                                    callback(null, "success");
-                                }
-                            }
-                            return testCollection;
-                        }
-                    }
-                    return testDB;
-                },
-                close: function(){
-                    
-                }
-            }
-            callback(null, client);
-        }
-    };
-}
+var connectionString = process.env.CONNECTION_STRING;
+var stringSplit1 = connectionString.split("://")[1];
+var stringSplit2 = stringSplit1.split('@');
+var userNamePassword = stringSplit2[0];
+userNamePassword = userNamePassword.split(':');
+var userName = userNamePassword[0];
+var password = userNamePassword[1];
+var databaseName = obj.databaseName;
+var collectionName = obj.collectionName;
+connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : ""));
+
 
 module.exports = {
-
     queryCount: function (callback, errorCallback, retry = 2) { 
         DbConnection.Get()
         .then((mongoClient) => {

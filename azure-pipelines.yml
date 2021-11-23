@@ -1,0 +1,155 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  webAppName: '<Name of your webapp>'
+  serviceConnection: '<Name of your webARM Service connection>'
+  azureSubscriptionId: '<Azure subscriptionId>'
+  loadTestResource: '<Name of your load test resource>'
+  loadTestResourceGroup: '<Name of your load test resource group>'
+  location: 'EAST US'
+
+
+stages:
+- stage: Build
+  displayName: Build 
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: windows-latest
+
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '14.15.1'
+      displayName: 'Install Node.js'
+
+    - script: |
+        npm install
+        npm run build
+      displayName: 'npm install and build'
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+
+- stage: Deploy
+  displayName: Deploy 
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: windows-latest
+    
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: $(serviceConnection)
+        subscriptionId: $(azureSubscriptionId)
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(webAppName)-rg'
+        location: 'East US'
+        templateLocation: 'Linked artifact'
+        csmFile: '$(System.DefaultWorkingDirectory)/windows-webapp-template.json'
+        overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName)-host -appInsightsLocation "East US" -databaseAccountId $(webAppName)db -databaseAccountLocation "East US"'
+        deploymentMode: 'Incremental'
+        deploymentOutputs: 'output'
+    
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          $deploymentOutput= ConvertFrom-Json '$(output)'
+          $connectionStringValue= $deploymentOutput.azureCosmosDBAccountKeys.value
+          Write-Host "##vso[task.setvariable variable=connectionString;issecret=true;]$connectionStringValue"
+
+    - task: AzureAppServiceSettings@1
+      inputs:
+        azureSubscription: $(serviceConnection)
+        appName: '$(webAppName)'
+        resourceGroupName: '$(webAppName)-rg'
+        appSettings: |
+          [
+             {
+              "name": "CONNECTION_STRING",
+              "value": "$(connectionString)",
+              "slotSetting": false
+             },
+             {
+              "name": "MSDEPLOY_RENAME_LOCKED_FILES",
+              "value": 1,
+              "slotSetting": false
+             },
+             {
+              "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+              "value": true,
+              "slotSetting": false
+             }
+          ]
+
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: drop
+
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(serviceConnection)
+        appType: 'webApp'
+        WebAppName: $(webAppName)
+        packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+        ScriptType: 'Inline Script'
+        InlineScript: 'npm install'
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifact: drop
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(serviceConnection)
+        appType: 'webApp'
+        WebAppName: $(webAppName)
+        packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
+        enableCustomDeployment: true
+        DeploymentType: 'zipDeploy'
+        TakeAppOfflineFlag: false
+
+- stage: LoadTest
+  displayName: Load Test
+  dependsOn: Deploy
+  condition: succeeded()
+  jobs:
+  - job: LoadTest
+    displayName: Load Test
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: AzureLoadTest@1
+      inputs:
+        azureSubscription: $(serviceConnection)
+        loadTestConfigFile: 'SampleApp.yaml'
+        resourceGroup: $(loadTestResourceGroup)
+        loadTestResource: $(loadTestResource)
+
+    - publish: $(System.DefaultWorkingDirectory)/loadTest
+      artifact: results

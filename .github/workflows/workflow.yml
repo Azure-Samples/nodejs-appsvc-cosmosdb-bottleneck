@@ -49,6 +49,7 @@ jobs:
             $setConnectionString = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings CONNECTION_STRING="$connectionString"
             $setAppSettings = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings MSDEPLOY_RENAME_LOCKED_FILES=1
             $setAppSettings = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true
+            $setAppSettings = az webapp config appsettings set --name "${{ env.AZURE_WEBAPP_NAME }}" --resource-group "${{ env.AZURE_WEBAPP_NAME }}-rg" --settings HEADER_VALUE="${{ secrets.MY_SECRET }}"
           azPSVersion: "latest"
           
       - name: 'Deploy to Azure WebApp'

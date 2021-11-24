@@ -95,7 +95,12 @@ stages:
               "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
               "value": true,
               "slotSetting": false
-             }
+             },
+             {
+              "name": "HEADER_VALUE",
+              "value": "$(mySecret)",
+              "slotSetting": false
+             }   
           ]
 
     - task: DownloadPipelineArtifact@2

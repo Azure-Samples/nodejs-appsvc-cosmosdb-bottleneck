@@ -15,11 +15,11 @@
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
           <collectionProp name="1400604752">
-            <stringProp name="1567">10</stringProp>
+            <stringProp name="1567">5</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="48873">180</stringProp>
             <stringProp name="49710">240</stringProp>
-            <stringProp name="10">10</stringProp>
+            <stringProp name="10">5</stringProp>
           </collectionProp>
         </collectionProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -53,11 +53,11 @@
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
           <collectionProp name="1400604752">
-            <stringProp name="1567">10</stringProp>
+            <stringProp name="1567">5</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="48873">180</stringProp>
             <stringProp name="49710">240</stringProp>
-            <stringProp name="10">10</stringProp>
+            <stringProp name="10">5</stringProp>
           </collectionProp>
         </collectionProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
@@ -98,11 +98,11 @@
       <kg.apc.jmeter.threads.UltimateThreadGroup guiclass="kg.apc.jmeter.threads.UltimateThreadGroupGui" testclass="kg.apc.jmeter.threads.UltimateThreadGroup" testname="jp@gc - Ultimate Thread Group" enabled="true">
         <collectionProp name="ultimatethreadgroupdata">
           <collectionProp name="1400604752">
-            <stringProp name="1567">10</stringProp>
+            <stringProp name="1567">5</stringProp>
             <stringProp name="0">0</stringProp>
             <stringProp name="48873">180</stringProp>
             <stringProp name="49710">240</stringProp>
-            <stringProp name="10">10</stringProp>
+            <stringProp name="10">5</stringProp>
           </collectionProp>
         </collectionProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">

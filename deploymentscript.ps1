@@ -91,12 +91,11 @@ while($true) {
     # Create the request
     $HTTP_Status = Get-UrlStatusCode('http://' + $deploymentName + '.azurewebsites.net')
     if($HTTP_Status -eq 200) {
-        break;
+        Write-Host "Deployment Complete"
+        Write-Host "Open url https://$deploymentName.azurewebsites.net in the browser"
+        Write-Host "To delete the app, run command 'az group delete --name $resourceGroup'"
+        exit
     } 
     Write-Host "Warming up App Service.."
     Start-Sleep -s 3
 }
-
-Write-Host "Deployment Complete"
-Write-Host "Open url https://$deploymentName.azurewebsites.net in the browser"
-Write-Host "To delete the app, run command 'az group delete --name $resourceGroup'"

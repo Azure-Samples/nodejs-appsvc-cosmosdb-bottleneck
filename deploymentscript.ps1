@@ -2,7 +2,7 @@
 {
     try
     {
-        [System.Net.WebRequest]::Create($Url).GetResponse()
+        [System.Net.WebRequest]::Create($Url).GetResponse().StatusCode
     }
     catch [Net.WebException]
     {
@@ -88,6 +88,8 @@ git remote add azwebapp $publishConfig.scmUri
 git push azwebapp main:master
 
 while($true) {
+    Write-Host "Warming up App Service.."
+    Start-Sleep -s 3
     # Create the request
     $HTTP_Status = Get-UrlStatusCode('http://' + $deploymentName + '.azurewebsites.net')
     if($HTTP_Status -eq 200) {
@@ -96,6 +98,4 @@ while($true) {
         Write-Host "To delete the app, run command 'az group delete --name $resourceGroup'"
         exit
     } 
-    Write-Host "Warming up App Service.."
-    Start-Sleep -s 3
 }

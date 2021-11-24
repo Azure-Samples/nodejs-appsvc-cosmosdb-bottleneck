@@ -4,7 +4,7 @@ var obj = JSON.parse(fs.readFileSync('connectionData.json', 'utf8'));
 var DbConnection = require('./db');
 
 var connectionString = "mongodb://account:key@account.documents.azure.com:10255/?ssl=true";
-var connectionString = process.env.CONNECTION_STRING;
+var connectionString = process.env.CONNECTION_STRING; 
 var stringSplit1 = connectionString.split("://")[1];
 var stringSplit2 = stringSplit1.split('@');
 var userNamePassword = stringSplit2[0];

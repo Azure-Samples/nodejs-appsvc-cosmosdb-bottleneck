@@ -30,18 +30,6 @@ jobs:
       - name: Checkout GitHub Actions 
         uses: actions/checkout@v2
         
-      - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
-      - name: npm install and build
-        continue-on-error: false
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
-  
       - name: Login to Azure
         uses: azure/login@v1
         continue-on-error: false

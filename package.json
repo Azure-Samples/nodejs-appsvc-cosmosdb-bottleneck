@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "fs": "0.0.1-security",
-    "jsdom": "^13.0.0",
-    "mongodb": "^3.1.10",
+    "jsdom": "^18.1.1",
+    "mongodb": "^3.7.3",
     "natives": "^1.1.6"
   },
   "engines": {

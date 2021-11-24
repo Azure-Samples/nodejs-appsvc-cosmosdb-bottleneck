@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "nodejs-webapp",
   "scripts": {
-    "start": "node server.js" 
+    "start": "node server.js"
   },
   "author": {
     "name": "microsoft"
@@ -15,6 +15,6 @@
     "natives": "^1.1.6"
   },
   "engines": {
-    "node": "^14.15.1"
+    "node": "14.15.1"
   }
 }

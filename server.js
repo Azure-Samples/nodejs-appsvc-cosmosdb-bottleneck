@@ -17,8 +17,8 @@ var server = http.createServer(function (req, res) {
     if(!reqUrl || (!!reqUrl && (reqUrl == "" || reqUrl.toLowerCase() == "index.html"))){
         if(config.enableSecretsFeature) {
             console.log(req.headers['x-secret']);
-            console.log(config.secretHeaderValue);
-            if(req.headers['x-secret'] != config.secretHeaderValue) {
+            console.log(process.env.HEADER_VALUE);
+            if(req.headers['x-secret'] != process.env.HEADER_VALUE) {
                 res.writeHead(401, "Unauthorized");
                 res.end();
                 return;

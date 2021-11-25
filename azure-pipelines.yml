@@ -83,7 +83,7 @@ stages:
           [
              {
               "name": "CONNECTION_STRING",
-              "value": "$(dasd)",
+              "value": "$(connectionString)",
               "slotSetting": false
              },
              {

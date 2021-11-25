@@ -58,7 +58,7 @@ if([string]::IsNullOrWhiteSpace($location)) {
     $location = "eastus"
 }
 
-$resourceGroup = $deploymentName + "-rg"
+$resourceGroup = $deploymentName + $location + "-rg"
 Write-Host "Creating resource group " $resourceGroup
 az group create --location $location --name $resourceGroup --subscription $selectedSubscription
 $databaseName = $deploymentName + "db"
@@ -66,7 +66,7 @@ $databaseName = $deploymentName + "db"
 Write-Host "Deploying Sample application.. (this might take a few minutes)"
 $deploymentOutputs = az deployment group create --resource-group $resourceGroup --subscription $selectedSubscription --mode Incremental --template-file ./windows-webapp-template.json --parameters "webAppName=$deploymentName" --parameters "hostingPlanName=$deploymentName-host" --parameters "appInsightsLocation=$location" --parameters "databaseAccountId=$databaseName" --parameters "databaseAccountLocation=$location" -o json
 $deploymentOutputs = $deploymentOutputs | ConvertFrom-Json
-$connectionString = [String]$deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value -replace '&','^^^&'
+$connectionString = [String]($deploymentOutputs.properties.outputs.azureCosmosDBAccountKeys.value -split '&')[0]
 
 Write-Host "Setting connection string to cosmos db"
 $setConnectionString = az webapp config appsettings set --name $deploymentName --resource-group $resourceGroup --subscription $selectedSubscription --settings CONNECTION_STRING="$connectionString"

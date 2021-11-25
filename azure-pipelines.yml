@@ -95,7 +95,12 @@ stages:
               "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
               "value": true,
               "slotSetting": false
-             }
+             },
+             {
+              "name": "HEADER_VALUE",
+              "value": "$(mySecret)",
+              "slotSetting": false
+             }   
           ]
 
     - task: DownloadPipelineArtifact@2
@@ -111,19 +116,6 @@ stages:
         packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
         ScriptType: 'Inline Script'
         InlineScript: 'npm install'
-    - task: DownloadPipelineArtifact@2
-      inputs:
-        artifact: drop
-    - task: AzureRmWebAppDeployment@4
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: $(serviceConnection)
-        appType: 'webApp'
-        WebAppName: $(webAppName)
-        packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
-        enableCustomDeployment: true
-        DeploymentType: 'zipDeploy'
-        TakeAppOfflineFlag: false
 
 - stage: LoadTest
   displayName: Load Test

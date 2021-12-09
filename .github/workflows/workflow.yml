@@ -9,9 +9,9 @@ on:
         - main
 
 env:
-  AZURE_WEBAPP_NAME: "<Name of your webapp>"    # set this to your application's name
-  LOAD_TEST_RESOURCE: "<Name of your load test resource>"
-  LOAD_TEST_RESOURCE_GROUP: "<Name of your load test resource group>"
+  AZURE_WEBAPP_NAME: "jjloadtestsample"    # set this to your application's name
+  LOAD_TEST_RESOURCE: "loadtestingpreview"
+  LOAD_TEST_RESOURCE_GROUP: "loadtest-rg"
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.15.1'                # set this to the node version to use
   LOCATION: "West US"

@@ -55,7 +55,7 @@ while($true) {
 $location = Read-Host -Prompt "Enter location (eastus)"
 $location = $location.Trim()
 if([string]::IsNullOrWhiteSpace($location)) {
-    $location = "eastus"
+    $location = "westeurope"
 }
 
 $resourceGroup = $deploymentName + $location + "-rg"

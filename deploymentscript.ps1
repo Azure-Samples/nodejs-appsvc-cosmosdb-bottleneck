@@ -18,7 +18,7 @@ $subscriptionList = az account list -o json | ConvertFrom-Json
 $subscriptionList | Format-Table name, id, tenantId -AutoSize
 $selectedSubscription = $output.name
 Write-Host "Currently logged in to subscription """$output.name.Trim()""" in tenant " $output.tenantId
-$selectedSubscription = Read-Host "Enter subscription Id ("$output.id")"
+$selectedSubscription = Read-Host "Enter subscription Id ("$output.id") "
 $selectedSubscription = $selectedSubscription.Trim()
 if([string]::IsNullOrWhiteSpace($selectedSubscription)) {
     $selectedSubscription = $output.id

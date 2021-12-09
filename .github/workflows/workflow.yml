@@ -14,9 +14,9 @@ env:
   LOAD_TEST_RESOURCE_GROUP: "loadtest-rg"
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '14.15.1'                # set this to the node version to use
-  LOCATION: "West US"
-  APPINSIGHTLOCATION: "West US"
-  DATABASEACCOUNTLOCATION: "westus"
+  LOCATION: "West Europe"
+  APPINSIGHTLOCATION: "West Europe"
+  DATABASEACCOUNTLOCATION: "westeurope"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

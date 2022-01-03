@@ -14,16 +14,16 @@ var server = http.createServer(function (req, res) {
     var reqUrl = req.url.replace(/^\/+|\/+$/g, '');
     var method = req.method.toLowerCase();
     
-    if(!reqUrl || (!!reqUrl && (reqUrl == "" || reqUrl.toLowerCase() == "index.html"))){
-        if(config.enableSecretsFeature) {
-            console.log(req.headers['x-secret']);
-            console.log(process.env.HEADER_VALUE);
-            if(req.headers['x-secret'] != process.env.HEADER_VALUE) {
-                res.writeHead(401, "Unauthorized");
-                res.end();
-                return;
-            }
+    if(config.enableSecretsFeature) {
+        console.log(req.headers['x-secret']);
+        console.log(process.env.HEADER_VALUE);
+        if(req.headers['x-secret'] != process.env.HEADER_VALUE) {
+            res.writeHead(401, "Unauthorized");
+            res.end();
+            return;
         }
+    }
+    if(!reqUrl || (!!reqUrl && (reqUrl == "" || reqUrl.toLowerCase() == "index.html"))){
         var data = fs.readFileSync('index.html');
         
         dbOperations.queryCount(function (visitCount){

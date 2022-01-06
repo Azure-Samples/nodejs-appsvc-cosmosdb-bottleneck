@@ -11,7 +11,7 @@ pool:
 
 variables:
   webAppName: 'jjloadtestdemo'
-  serviceConnection: 'Johns Internal Consumption(2e500704-1ab3-49c6-bbbb-8b2bec98ffdc)'
+  serviceConnection: 'johns'
   azureSubscriptionId: '2e500704-1ab3-49c6-bbbb-8b2bec98ffdc'
   loadTestResource: 'loadtestingpreview'
   loadTestResourceGroup: 'loadtest-rg'

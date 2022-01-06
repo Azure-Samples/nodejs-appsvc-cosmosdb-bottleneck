@@ -59,10 +59,10 @@ stages:
         subscriptionId: $(azureSubscriptionId)
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(webAppName)-rg'
-        location: 'East US'
+        location: $(location)
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/windows-webapp-template.json'
-        overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName)-host -appInsightsLocation "East US" -databaseAccountId $(webAppName)db -databaseAccountLocation "East US"'
+        overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName)-host -appInsightsLocation "$(location)" -databaseAccountId $(webAppName)db -databaseAccountLocation "$(location)"'
         deploymentMode: 'Incremental'
         deploymentOutputs: 'output'
     
@@ -133,6 +133,13 @@ stages:
         loadTestConfigFile: 'SampleApp.yaml'
         resourceGroup: $(loadTestResourceGroup)
         loadTestResource: $(loadTestResource)
-
+        env: |
+          [
+            {
+            "name": "webapp",
+            "value": "$(webAppName).azurewebsites.net"
+            }
+          ]
+          
     - publish: $(System.DefaultWorkingDirectory)/loadTest
       artifact: results

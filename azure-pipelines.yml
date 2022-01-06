@@ -59,10 +59,10 @@ stages:
         subscriptionId: $(azureSubscriptionId)
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(webAppName)-rg'
-        location: 'East US'
+        location: $(location)
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/windows-webapp-template.json'
-        overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName)-host -appInsightsLocation "East US" -databaseAccountId $(webAppName)db -databaseAccountLocation "East US"'
+        overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName)-host -appInsightsLocation "$(location)" -databaseAccountId $(webAppName)db -databaseAccountLocation "$(location)"'
         deploymentMode: 'Incremental'
         deploymentOutputs: 'output'
     

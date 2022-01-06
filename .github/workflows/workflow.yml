@@ -82,7 +82,7 @@ jobs:
             [
               {
               "name": "webapp",
-              "value": "$(webAppName).azurewebsites.net"
+              "value": "${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
               }
             ]          
       

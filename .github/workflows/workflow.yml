@@ -71,7 +71,22 @@ jobs:
         continue-on-error: false
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
+
+      - name: Create Resource Group
+        uses: azure/powershell@v1
+        continue-on-error: false
+        with:
+          inlineScript: |
+            az group create --name "${{ env.LOAD_TEST_RESOURCE_GROUP }}" --location "${{ env.LOCATION }}"
+          azPSVersion: "latest"      
+          
+      - name: Create Azure Load Testing resource
+        uses: azure/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+          template: ./ARMTemplate/template.json
+          parameters: ./ARMTemplate/parameters.json name=${{ env.LOAD_TEST_RESOURCE }} location="${{ env.LOCATION }}"
+          
       - name: 'Azure Load Testing'
         uses: azure/load-testing@v1
         with:

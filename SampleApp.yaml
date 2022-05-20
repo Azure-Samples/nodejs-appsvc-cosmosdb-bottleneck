@@ -1,6 +1,6 @@
 version: v0.1
-testName: SampleAppTest
-testPlan: SampleApp.jmx
+testName: SampleAppTestParam
+testPlan: SampleAppParam.jmx
 description: 'SampleApp Test Run'
 engineInstances: 1
 failureCriteria: 

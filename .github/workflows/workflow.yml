@@ -45,7 +45,7 @@ jobs:
             [
               {
                  "name": "webapp",
-                 "value": "${{ENV.ENDPOINT_URL}}",
+                 "value": "${{end.ENDPOINT_URL}}",
               }
             ]
 

@@ -84,3 +84,13 @@ Looking at the action above:
 1. it points to the YAML file which describes the test
 2. It points to the name of the Azure load test service - which must have been previously provisioned
 3. Sets an environment variable "webapp" into the load test with the endpoint of the system under test. 
+4. It should be noted that there is no mechanism at this time to define where to capture server-side metrics. 
+
+Following this, there also needs to be an action to gather up the results of the load test:
+
+```
+ - uses: actions/upload-artifact@v2
+        with:
+          name: loadTestResults
+          path: ${{ github.workspace }}/loadTest
+```

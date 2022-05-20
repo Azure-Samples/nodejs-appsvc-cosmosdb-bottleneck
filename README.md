@@ -38,6 +38,8 @@ Besides the JMX file which defines the actual load test, there are 2 other files
 1. The load test YAML
 2. The GitHib action which references the load test YAML definition.
 
+This repository has examples of all these configuration files. This includes a sample GitHub action.
+
 ### Load test YAML
 
 The YAML file defines how to run the load test. A sample YAML is shown below:

@@ -22,7 +22,7 @@ Once deployed, discuss:
 1. the application location
 2. the application moving parts and how these may impact the performance of the application.
 
-## CHallenge Three - Run some load tests, checking results and changing scale to improve the application
+## Challenge Three - Run some load tests, checking results and changing scale to improve the application
 
 May need here to achieve a target request rate that is in excess of what the service can deliver out of the box.
 

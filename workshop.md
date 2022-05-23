@@ -4,6 +4,8 @@ This is a short series of challanges that can be used in an interactive workshop
 
 It uses the sample application and sample load test script in this repository as a starting point.
 
+The demo application is an web app hosted in Azure App Services with a Cosmos Database backend. The mission is to see if you can get 1000 requests per second from this application without spending more money on the Azure resources.
+
 Later challenges are about adapting this to one of your own application or service.
 
 ## Challenge One - Create Load Test Resource

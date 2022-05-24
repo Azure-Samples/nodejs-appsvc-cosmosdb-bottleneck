@@ -120,6 +120,89 @@ You will need to think about:
 4. How to drive parameters into the test
 5. How to set success criteria
 
+The overall approach for building a load testing action is documented [here](https://docs.microsoft.com/en-us/azure/load-testing/tutorial-cicd-github-actions)
+
+This repository has an action built for this, so in your cloned repository look for .github/workflows/worflow.yaml
+
+```
+# This is a basic workflow to help you get started with Actions
+
+name: Sample App deploy
+
+# Controls when the workflow will run
+on:
+  push:
+      branches:
+        - main
+
+env:
+  LOAD_TEST_RESOURCE: "eastloadtest"
+  LOAD_TEST_RESOURCE_GROUP: "loadtest-rg"
+  ENDPOINT_URL: "jjnewsuttotest.azurewebsites.net"
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  loadTest:
+    name: Load Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Actions 
+        uses: actions/checkout@v2
+          
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: 'Azure Load Testing'
+        uses: azure/load-testing@v1
+        with:
+          loadTestConfigFile: 'SampleApp.yaml'
+          loadTestResource: ${{ env.LOAD_TEST_RESOURCE }}
+          resourceGroup: ${{ env.LOAD_TEST_RESOURCE_GROUP }}
+          env: |
+            [
+              {
+                 "name": "webapp",
+                 "value": "${{env.ENDPOINT_URL}}"
+              }
+            ]
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: loadTestResults
+          path: ${{ github.workspace }}/loadTest
+```
+
+The workflow has three steps:
+1. Authenticate using an Azure AD service principal. This is the "AZURE_CREDENTIALS" GitHub secret. This service principal creation is outside of this pipelien and is documented [here](https://docs.microsoft.com/en-us/azure/load-testing/tutorial-cicd-github-actions#set-up-github-access-permissions-for-azure)
+2. Run the load test using the "SampleApp.yaml" - which references the JMeter test file "SampleApp.xml"
+3. Upload the results
+
+The heart of the load test configuration is the YAML file. It is this that defines the load test to be run
+
+```
+version: v0.1
+testName: SampleAppTestParam
+testPlan: SampleAppParam.jmx
+description: 'SampleApp Test Run'
+engineInstances: 1
+failureCriteria: 
+- avg(response_time_ms) > 5000
+- percentage(error) > 20
+```
+
+If all is correctly configured, any change to the repository will cause the GitHub action to run.
+
+![alt-text](img/azure-load-test-github-action.png "load test GitHub Action")
+
+So, now we have a working test that can be run interactively or as part of CI/CD pipeline.
+
+If you have managed to this successfully, all that is left is to apply this to your own application.
+
+
 
 # Challenge Six - Generate a JMeter Dashboard of the results
 

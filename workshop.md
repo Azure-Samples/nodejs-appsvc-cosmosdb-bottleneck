@@ -8,6 +8,7 @@ The demo application is an web app hosted in Azure App Services with a Cosmos Da
 
 Later challenges are about adapting this to one of your own application or service.
 
+
 # Challenge One - Create Load Test Resource
 
 This may be done in the Azure portal or using automation. You could also try the [Quickstart](https://docs.microsoft.com/en-us/azure/load-testing/quickstart-create-and-run-load-test)
@@ -17,6 +18,7 @@ This may be done in the Azure portal or using automation. You could also try the
 You need to consider the location of the load testing service with respect to the target system's location. Discuss why this may be important.
 
 So, now we have a load testing service and we have tested it out against a URL, now let's deploy an application in the next challenge.
+
 
 # Challenge Two - Create a Demo System Under Test
 
@@ -54,6 +56,7 @@ Once deployed, discuss:
 1. the application location
 2. the application moving parts and how these may impact the performance of the application.
 
+
 # Challenge Three - Run some load tests, checking results and changing scale to improve the application
 
 In this challenge, we are going to use the JMeter JMX file from the cloned GitHub repo. This makes a series of requests against the application. So you load test will need to use this script for this challenge.
@@ -85,11 +88,28 @@ Look closely at the results from the run. Some discussion points:
 The next step will be to tune the application and re-test to see if we can meet the original target request rate.
 
 
-## Challenge Four - Tune the application and re-check
+# Challenge Four - Tune the application and re-check
 
-This may need several iterations.
+For this challenge, we need to be able to hit a higher reqwuest rate. Some things to think about:
+
+1. How can we drive more requests into the application
+2. What can we alter on the application to improve its throughput?
+3. Remember, the application should not be over provisioned as that is a waste of money.
 
 What needed to change to achieve the desired request rate?
+
+When you do multiple test runs, these will all be listed under the same test. You can use the description field to annotate the tests to summarise the changes.
+
+![alt-text](img/azure-load-test-multiple-runs.png "load test multiple runs")
+
+You can also compare different runs to see their differences. This is really useful to see how things have changed between runs.
+
+![alt-text](img/azure-load-test-compare-multiple-runs.png "load test compare multiple runs")
+
+## Discuss
+1. Did you hit the target requests per second?
+2. What needed to change to do this?
+
 
 # Challenge Five - Generate a JMeter Dashboard of the results
 

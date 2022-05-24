@@ -143,7 +143,16 @@ This will then generate a folder holding the HTML to the standard JMeter report.
 
 ![alt-text](img/azure-load-test-html-report.png "JMeter HTML Report")
 
- 
+The command line approach is:
+
+```
+./jmeter.sh -g testreport.csv -o out
+```
+
+![alt-text](img/azure-load-test-command-line-html-report.png "JMeter HTML Report")
+
+
+
 # Challenge Seven - Load test your own application's endpoint
 
 This is where things get more interesting - to apply all of the above to an application of your own. What you will need to do is:

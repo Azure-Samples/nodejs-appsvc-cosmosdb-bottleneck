@@ -216,6 +216,10 @@ How you may generate the JMeter dashboard yourself.
 2. There is a menu to generate an HTML report and command-line options
 3. Both of these require the output csv from a test run
 
+Firstly, you need to download the load test results file from the Azure portal. This will be used later whether in the JMeter application or on the command-line. The download is zipped, so will need to be unzipped before it is used.
+
+![alt-text](img/azure-load-test-download-results.png "Download load test results")
+
 If you want to generate the HTML report interactively, then start JMeter and choose Generate HTML Report. This requires you to add the test results CSV and a default properties file https://github.com/apache/jmeter/blob/master/bin/user.properties 
 
 ![alt-text](img/azure-load-test-generate-html-report1.png "JMeter generate HTML Report")
@@ -239,7 +243,8 @@ The command line approach is:
 # Challenge Seven - Load test your own application's endpoint
 
 This is where things get more interesting - to apply all of the above to an application of your own. What you will need to do is:
-1. Create/amend a JMX file. 
+1. Create/amend a JMX file. You can either use the JMeter user interface or use an interactive JMX editor http://jmeter-plugins.org/editor/
 2. Run load test interactively
 3. Discuss what changes may be needed to the application or test to get better results
 4. Automate in GitHub action - setting success criteria
+

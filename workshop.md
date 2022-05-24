@@ -20,10 +20,36 @@ So, now we have a load testing service and we have tested it out against a URL, 
 
 ## Challenge Two - Create a Demo System Under Test
 
-Deploy the demo application using one of the scripts provided.
+This challenge is about having our own application to test that we can later change to meet our performance requirements. 
 
-Where is it best to run these scripts?
+### Installation
 
+1. Clone this GitHub repository to your PC
+
+```
+git clone https://github.com/jometzg/nodejs-appsvc-cosmosdb-bottleneck.git
+```
+
+2. In your terminal window, log into Azure and set a subscription(subscription which would contain the webapp) :
+
+        az login
+        az account set -s mySubscriptionName
+
+3. Clone the sample application's source repository. The sample application is a Node.js app consisting of an Azure App Service web component and a Cosmos DB database. The repo also contains a PowerShell script that deploys the sample app to your Azure subscription.
+
+        git clone https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git
+
+4. Deploy the sample app using the PowerShell script. (Tip: macOS users can install PowerShell [here](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
+
+        cd SampleApp
+        .\deploymentscript.ps1
+
+5. You will be prompted to supply a unique application name and a location (default is `eastus`). A resource group for the resources would be created with the same name.
+6. Once deployment is complete, browse to the running sample application with your browser.
+
+        https://<app_name>.azurewebsites.net
+
+### Discussion
 Once deployed, discuss:
 1. the application location
 2. the application moving parts and how these may impact the performance of the application.

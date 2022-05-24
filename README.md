@@ -6,9 +6,10 @@ It uses the sample application and sample load test script in this repository as
 
 The demonstration application is an web app hosted in Azure App Services with a Cosmos Database backend. 
 
-The mission is to see if you can get *500 requests per second* from this application without spending more money than is necessary on the Azure resources.
+The mission is to see if you can get **500 requests per second** from this application without spending more money than is necessary on the Azure resources.
 
 The final challenge is about adapting this to one of your own application or service.
+
 
 
 # Challenge One - Create Load Test Resource

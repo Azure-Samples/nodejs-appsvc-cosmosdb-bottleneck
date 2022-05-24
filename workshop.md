@@ -8,7 +8,7 @@ The demo application is an web app hosted in Azure App Services with a Cosmos Da
 
 Later challenges are about adapting this to one of your own application or service.
 
-## Challenge One - Create Load Test Resource
+# Challenge One - Create Load Test Resource
 
 This may be done in the Azure portal or using automation. You could also try the [Quickstart](https://docs.microsoft.com/en-us/azure/load-testing/quickstart-create-and-run-load-test)
 
@@ -18,11 +18,11 @@ You need to consider the location of the load testing service with respect to th
 
 So, now we have a load testing service and we have tested it out against a URL, now let's deploy an application in the next challenge.
 
-## Challenge Two - Create a Demo System Under Test
+# Challenge Two - Create a Demo System Under Test
 
 This challenge is about having our own application to test that we can later change to meet our performance requirements. 
 
-### Installation
+## Installation
 
 1. Clone this GitHub repository to your PC
 
@@ -49,20 +49,49 @@ git clone https://github.com/jometzg/nodejs-appsvc-cosmosdb-bottleneck.git
 
         https://<app_name>.azurewebsites.net
 
-### Discussion
+## Discussion
 Once deployed, discuss:
 1. the application location
 2. the application moving parts and how these may impact the performance of the application.
 
-## Challenge Three - Run some load tests, checking results and changing scale to improve the application
+# Challenge Three - Run some load tests, checking results and changing scale to improve the application
 
-May need here to achieve a target request rate that is in excess of what the service can deliver out of the box.
+In this challenge, we are going to use the JMeter JMX file from the cloned GitHub repo. This makes a series of requests against the application. So you load test will need to use this script for this challenge.
+
+Follow the [steps](https://docs.microsoft.com/en-gb/azure/load-testing/how-to-create-and-run-load-test-with-jmeter-script#create-a-load-test) to configure a load test in the load test resource you created in challenge one.
+
+You will need to upload the "SampleApp.JMX" file from the cloned repository
+
+![alt-text](https://docs.microsoft.com/en-gb/azure/load-testing/media/how-to-create-and-run-load-test-with-jmeter-script/create-new-test-test-plan.png "upload test plan")
+
+The SampleApp.JMX file is parameterised, so that the URL of the target application is not defined in the JMX file, but can be injected by JMeter at runtime. The parameter is called "webapp". It will need to be entered in the page shown below:
+
+![alt-text](img/azure-load-test-parameters.png "set a parameter for the load test")
+
+Make sure to also set the monitoring to point to your applications resources. This will allow Azure load testing to capture metrics from this application.
+
+![alt-text](img/azure-load-test-monitoring.png "Set monitoring for the load test")
+
+Once the configuration is complete. If the load test has not started, press "Run" and wait.
+
+![alt-text](img/azure-load-test-run.png "load test run")
+
+Look closely at the results from the run. Some discussion points:
+1. What is the overall request rate
+2. Is this what is needed
+3. Are there any errors? If, so any ideas why?
+4. Look at the Cosmos database metrics
+
+The next step will be to tune the application and re-test to see if we can meet the original target request rate.
+
+
+## Challenge Four - Tune the application and re-check
 
 This may need several iterations.
 
-What needed to change to acheive the desired request rate?
+What needed to change to achieve the desired request rate?
 
-## Challenge Four - Generate a JMeter Dashboard of the results
+# Challenge Five - Generate a JMeter Dashboard of the results
 
 The Azure Load Test service is currently in preview. The feature to generate JMeter dashboards has been disabled.
 
@@ -72,7 +101,7 @@ Work out how you may generate the JMeter dashboard yourself.
 2. Can it be done interactively or does it need some command-line tools?
 
 
-## Challenge Five - Automate load testing in a GitHub Action
+# Challenge Six - Automate load testing in a GitHub Action
 
 You will need to think about:
 1. In which GitHub repository to run the action
@@ -81,7 +110,7 @@ You will need to think about:
 4. How to drive parameters into the test
 5. How to set success criteria
  
-## Challenge Six - Load test your own application's endpoint
+# Challenge Seven - Load test your own application's endpoint
 
 This is where things get more interesting - to apply all of the above to an application of your own. What you will need to do is:
 1. Create/amend a JMX file. 

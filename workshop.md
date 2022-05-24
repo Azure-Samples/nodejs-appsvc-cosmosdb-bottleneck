@@ -10,9 +10,9 @@ Later challenges are about adapting this to one of your own application or servi
 
 ## Challenge One - Create Load Test Resource
 
-THis may be done in the Azure portal or using automation. You need to consider the location of the load testing service with respect to the target system's location.
+This may be done in the Azure portal or using automation. You could also try the (https://docs.microsoft.com/en-us/azure/load-testing/quickstart-create-and-run-load-test([Quickstart]
 
-Discuss why this may be important.
+You need to consider the location of the load testing service with respect to the target system's location. Discuss why this may be important.
 
 ## Challenge Two - Create a Demo System Under Test
 

@@ -1,4 +1,4 @@
-# Load Test Workshop
+# Load Test Challenge Workshop
 
 This repository has been forked from the [Azure load test demo](https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck) repository and amended into a challenge-based set of exercises for an interactive workshop to get hands on experience in using Azure load testing on an application.
 

@@ -57,7 +57,7 @@ Once deployed, discuss:
 2. the application moving parts and how these may impact the performance of the application.
 
 
-# Challenge Three - Run some load tests, checking results and changing scale to improve the application
+# Challenge Three - Run a load test against the application
 
 In this challenge, we are going to use the JMeter JMX file from the cloned GitHub repo. This makes a series of requests against the application. So you load test will need to use this script for this challenge.
 
@@ -90,7 +90,7 @@ The next step will be to tune the application and re-test to see if we can meet 
 
 # Challenge Four - Tune the application and re-check
 
-For this challenge, we need to be able to hit a higher reqwuest rate. Some things to think about:
+For this challenge, we need to be able to hit a higher request rate. Some things to think about:
 
 1. How can we drive more requests into the application
 2. What can we alter on the application to improve its throughput?
@@ -111,17 +111,7 @@ You can also compare different runs to see their differences. This is really use
 2. What needed to change to do this?
 
 
-# Challenge Five - Generate a JMeter Dashboard of the results
-
-The Azure Load Test service is currently in preview. The feature to generate JMeter dashboards has been disabled.
-
-Work out how you may generate the JMeter dashboard yourself.
-
-1. What do you need to do this?
-2. Can it be done interactively or does it need some command-line tools?
-
-
-# Challenge Six - Automate load testing in a GitHub Action
+# Challenge Five - Automate load testing in a GitHub Action
 
 You will need to think about:
 1. In which GitHub repository to run the action
@@ -129,6 +119,30 @@ You will need to think about:
 3. How the action step is authenticated
 4. How to drive parameters into the test
 5. How to set success criteria
+
+
+# Challenge Six - Generate a JMeter Dashboard of the results
+
+This is an optional challenge. 
+
+The Azure Load Test service is currently in preview. The feature to generate JMeter dashboards has been disabled. In the meantime, if the JMeter HTML dashboard is needed, then it needs to be done directly in JMeter.
+
+How you may generate the JMeter dashboard yourself.
+
+1. You need a copy of JMeter on a PC. The download is https://jmeter.apache.org/download_jmeter.cgi
+2. There is a menu to generate an HTML report and command-line options
+3. Both of these require the output csv from a test run
+
+If you want to generate the HTML report interactively, then start JMeter and choose Generate HTML Report. This requires you to add the test results CSV and a default properties file https://github.com/apache/jmeter/blob/master/bin/user.properties 
+
+![alt-text](img/azure-load-test-generate-html-report1.png "JMeter generate HTML Report")
+
+![alt-text](img/azure-load-test-generate-html-report2.png "JMeter generate HTML Report")
+
+This will then generate a folder holding the HTML to the standard JMeter report.
+
+![alt-text](img/azure-load-test-html-report.png "JMeter HTML Report")
+
  
 # Challenge Seven - Load test your own application's endpoint
 

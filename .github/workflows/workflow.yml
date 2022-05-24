@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Sample App deploy
+name: Sample App load test
 
 # Controls when the workflow will run
 on:
@@ -9,10 +9,8 @@ on:
         - main
 
 env:
-  AZURE_WEBAPP_NAME: "jjloadtestsample"    # your application's name
   LOAD_TEST_RESOURCE: "eastloadtest"
   LOAD_TEST_RESOURCE_GROUP: "loadtest-rg"
-  NODE_VERSION: '14.15.1'                # set this to the node version to use
   ENDPOINT_URL: "jjsampleapp.azurewebsites.net"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel

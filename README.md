@@ -42,7 +42,7 @@ git clone https://github.com/jometzg/nodejs-appsvc-cosmosdb-bottleneck.git
 
 3. Clone the sample application's source repository. The sample application is a Node.js app consisting of an Azure App Service web component and a Cosmos DB database. The repo also contains a PowerShell script that deploys the sample app to your Azure subscription.
 
-        git clone https://github.com/Azure-Samples/nodejs-appsvc-cosmosdb-bottleneck.git
+        git clone https://github.com/jometzg/nodejs-appsvc-cosmosdb-bottleneck.git
 
 4. Deploy the sample app using the PowerShell script. (Tip: macOS users can install PowerShell [here](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-macos?view=powershell-7.1))
 

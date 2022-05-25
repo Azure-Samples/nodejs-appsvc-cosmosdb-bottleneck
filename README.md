@@ -49,7 +49,7 @@ git clone https://github.com/jometzg/nodejs-appsvc-cosmosdb-bottleneck.git
         cd SampleApp
         .\deploymentscript.ps1
 
-5. You will be prompted to supply a unique application name and a location (default is `eastus`). A resource group for the resources would be created with the same name.
+5. You will be prompted to supply a unique application name and a location (default is `eastus`). **It is best to leave this at 'eastus'**. A resource group for the resources would be created with the same name.
 6. Once deployment is complete, browse to the running sample application with your browser.
 
         https://<app_name>.azurewebsites.net

@@ -25,7 +25,14 @@ So, now we have a load testing service and we have tested it out against a URL, 
 
 # Challenge Two - Create a Demo System Under Test
 
-This challenge is about having our own application to test that we can later change to meet our performance requirements. 
+This challenge is about having our own application to test that we can later change to meet our performance requirements.
+
+On a Windows PC, there are three possible destinations for the code:
+1. Directly on the Windows PC file system
+2. In a Windows Subsystem for Linux (WSL) session
+3. Azure Cloud Shell
+
+You need to decide which destination suits you best. Azure Cloud Shell should have all of the tooling installed already.
 
 ## Installation
 

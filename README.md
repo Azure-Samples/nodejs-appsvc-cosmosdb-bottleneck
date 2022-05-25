@@ -146,9 +146,9 @@ on:
         - main
 
 env:
-  LOAD_TEST_RESOURCE: "eastloadtest"
-  LOAD_TEST_RESOURCE_GROUP: "loadtest-rg"
-  ENDPOINT_URL: "jjnewsuttotest.azurewebsites.net"
+  LOAD_TEST_RESOURCE: "your-loadtest-resource-name"
+  LOAD_TEST_RESOURCE_GROUP: "your-loadtest-rg"
+  ENDPOINT_URL: "yourwebsite.azurewebsites.net"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

@@ -73,7 +73,7 @@ In this challenge, we are going to use the JMeter JMX file from the cloned GitHu
 
 Follow the [steps](https://docs.microsoft.com/en-gb/azure/load-testing/how-to-create-and-run-load-test-with-jmeter-script#create-a-load-test) to configure a load test in the load test resource you created in challenge one.
 
-You will need to upload the "SampleApp.JMX" file from the cloned repository
+You will need to upload the "SampleAppParam.JMX" file from the cloned repository
 
 ![alt-text](https://docs.microsoft.com/en-gb/azure/load-testing/media/how-to-create-and-run-load-test-with-jmeter-script/create-new-test-test-plan.png "upload test plan")
 
@@ -188,7 +188,7 @@ jobs:
 
 The workflow has three steps:
 1. Authenticate using an Azure AD service principal. This is the "AZURE_CREDENTIALS" GitHub secret. This service principal creation is outside of this pipelien and is documented [here](https://docs.microsoft.com/en-us/azure/load-testing/tutorial-cicd-github-actions#set-up-github-access-permissions-for-azure)
-2. Run the load test using the "SampleApp.yaml" - which references the JMeter test file "SampleApp.xml"
+2. Run the load test using the "SampleApp.yaml" - which references the JMeter test file "SampleAppParam.xml"
 3. Upload the results
 
 The heart of the load test configuration is the YAML file. It is this that defines the load test to be run

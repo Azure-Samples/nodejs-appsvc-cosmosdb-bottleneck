@@ -55,11 +55,11 @@ stages:
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
         deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: $(serviceConnection)
-        subscriptionId: $(azureSubscriptionId)
+        azureResourceManagerConnection: 'AJ-MPN-DEV2 (ea9f37fa-15b5-4f77-95c0-80a03e0ef32a)'
+        subscriptionId: '$(azureSubscriptionId)'
         action: 'Create Or Update Resource Group'
         resourceGroupName: '$(webAppName)-rg'
-        location: $(location)
+        location: '$(location)'
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/windows-webapp-template.json'
         overrideParameters: '-webAppName $(webAppName) -hostingPlanName $(webAppName)-host -appInsightsLocation "$(location)" -databaseAccountId $(webAppName)db -databaseAccountLocation "$(location)"'

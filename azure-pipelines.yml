@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  webAppName: 'hafiq-WebApp'
+  webAppName: 'hafiq-webapp'
   serviceConnection: 'MyAzureLoadTestingRG'
   azureSubscriptionId: 'ea9f37fa-15b5-4f77-95c0-80a03e0ef32a'
   loadTestResource: 'Hafiq-EA-LT01'

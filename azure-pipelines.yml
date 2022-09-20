@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  webAppName: 'Hafiq-WebApp'
+  webAppName: 'hafiq-WebApp'
   serviceConnection: 'MyAzureLoadTestingRG'
   azureSubscriptionId: 'ea9f37fa-15b5-4f77-95c0-80a03e0ef32a'
   loadTestResource: 'Hafiq-EA-LT01'
@@ -76,7 +76,7 @@ stages:
 
     - task: AzureAppServiceSettings@1
       inputs:
-        azureSubscription: $(serviceConnection)
+        azureSubscription: 'AJ-MPN-DEV2 (ea9f37fa-15b5-4f77-95c0-80a03e0ef32a)'
         appName: '$(webAppName)'
         resourceGroupName: '$(webAppName)-rg'
         appSettings: |
@@ -110,9 +110,9 @@ stages:
     - task: AzureRmWebAppDeployment@4
       inputs:
         ConnectionType: 'AzureRM'
-        azureSubscription: $(serviceConnection)
+        azureSubscription: 'AJ-MPN-DEV2 (ea9f37fa-15b5-4f77-95c0-80a03e0ef32a)'
         appType: 'webApp'
-        WebAppName: $(webAppName)
+        WebAppName: '$(webAppName)'
         packageForLinux: '$(Pipeline.Workspace)/$(Build.BuildId).zip'
         ScriptType: 'Inline Script'
         InlineScript: 'npm install'
@@ -131,23 +131,23 @@ stages:
     - task: AzureResourceManagerTemplateDeployment@3
       inputs:
         deploymentScope: 'Resource Group'
-        azureResourceManagerConnection: $(serviceConnection)
-        subscriptionId: $(azureSubscriptionId)
+        azureResourceManagerConnection: 'AJ-MPN-DEV2 (ea9f37fa-15b5-4f77-95c0-80a03e0ef32a)'
+        subscriptionId: '$(azureSubscriptionId)'
         action: 'Create Or Update Resource Group'
-        resourceGroupName: $(loadTestResourceGroup)
+        resourceGroupName: '$(loadTestResourceGroup)'
         location: '$(location)'
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/ARMTemplate/template.json'
         csmParametersFile: '$(System.DefaultWorkingDirectory)/ARMTemplate/parameters.json'
         overrideParameters: '-name $(loadTestResource) -location "$(location)"'
-        deploymentMode: 'Incremental'    
+        deploymentMode: 'Incremental'
     
     - task: AzureLoadTest@1
       inputs:
-        azureSubscription: $(serviceConnection)
+        azureSubscription: 'AJ-MPN-DEV2 (ea9f37fa-15b5-4f77-95c0-80a03e0ef32a)'
         loadTestConfigFile: 'SampleApp.yaml'
-        resourceGroup: $(loadTestResourceGroup)
-        loadTestResource: $(loadTestResource)
+        resourceGroup: '$(loadTestResourceGroup)'
+        loadTestResource: '$(loadTestResource)'
         env: |
           [
             {

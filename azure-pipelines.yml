@@ -139,7 +139,7 @@ stages:
         templateLocation: 'Linked artifact'
         csmFile: '$(System.DefaultWorkingDirectory)/ARMTemplate/template.json'
         csmParametersFile: '$(System.DefaultWorkingDirectory)/ARMTemplate/parameters.json'
-        overrideParameters: '-name $(loadTestResource) -location "$(location)"'
+        overrideParameters: '-name "$(loadTestResource)" -location "$(location)"'
         deploymentMode: 'Incremental'    
     
     - task: AzureLoadTest@1

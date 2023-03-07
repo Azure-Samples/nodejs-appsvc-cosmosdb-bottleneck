@@ -61,7 +61,7 @@ if([string]::IsNullOrWhiteSpace($location)) {
 $resourceGroup = $deploymentName + $location + "-rg"
 Write-Host "Creating resource group " $resourceGroup
 az group create --location $location --name $resourceGroup --subscription $selectedSubscription
-$databaseName = $deploymentName + "db"
+$databaseName = $deploymentName.ToLower() + "db"
 
 Write-Host "Deploying Sample application.. (this might take a few minutes)"
 $deploymentOutputs = az deployment group create --resource-group $resourceGroup --subscription $selectedSubscription --mode Incremental --template-file ./windows-webapp-template.json --parameters "webAppName=$deploymentName" --parameters "hostingPlanName=$deploymentName-host" --parameters "appInsightsLocation=$location" --parameters "databaseAccountId=$databaseName" --parameters "databaseAccountLocation=$location" -o json

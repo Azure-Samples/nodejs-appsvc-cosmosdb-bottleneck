@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 't79loadtestbottleneckapp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0A0176FB9BD14A489CFA49B18F57D4B4 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5DDE1B7183B14F15A434475F4C865114 }}
           package: .

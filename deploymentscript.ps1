@@ -65,14 +65,14 @@ $tags = @{
     "TIMInvestmentID" = "23-29"
 }
 
-$tagsString = ""
-foreach ($key in $tags.Keys) {
-    $tagsString += "$key=$($tags[$key]);"
-}
-
+$resourceGroup = $deploymentName +"rmloadtest2" +"-rg"+"-001"
 Write-Host "Creating resource group " $resourceGroup
-az group create --location $location --name $resourceGroup --subscription $selectedSubscription --tags $tagsString
-
+az group create --location $location --name $resourceGroup --subscription $selectedSubscription `
+--tags "ApplicationName=$($tags["ApplicationName"])" `
+"AppPriority=$($tags["AppPriority"])" `
+"ChargeCode=$($tags["ChargeCode"])" `
+"DataProtectionCategorization=$($tags["DataProtectionCategorization"])" `
+"TIMInvestmentID=$($tags["TIMInvestmentID"])"
 
 
 $databaseName = $deploymentName.ToLower() + "db"

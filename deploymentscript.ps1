@@ -57,10 +57,24 @@ $location = $location.Trim()
 if([string]::IsNullOrWhiteSpace($location)) {
     $location = "eastus"
 }
+$tags = @{
+    "ApplicationName" = "t79r-rmloadtest2-rg-001"
+    "AppPriority" = "NA"
+    "ChargeCode" = "533005"
+    "DataProtectionCategorization" = "Low"
+    "TIMInvestmentID" = "23-29"
+}
 
-$resourceGroup = $deploymentName +"-rmloadtest" +"-rg"+"-001"
+$tagsString = ""
+foreach ($key in $tags.Keys) {
+    $tagsString += "$key=$($tags[$key]);"
+}
+
 Write-Host "Creating resource group " $resourceGroup
-az group create --location $location --name $resourceGroup --subscription $selectedSubscription
+az group create --location $location --name $resourceGroup --subscription $selectedSubscription --tags $tagsString
+
+
+
 $databaseName = $deploymentName.ToLower() + "db"
 
 Write-Host "Deploying Sample application.. (this might take a few minutes)"

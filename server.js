@@ -86,6 +86,7 @@ var server = http.createServer(function (req, res) {
                     utils.writeResponse(res, "added " + entries + " entries")
                     currentCount = 0;
                 }, function(error){
+                    console.log(error);
                     utils.writeError(res, "could not add " + entries + " entries")
                 });
             } else {

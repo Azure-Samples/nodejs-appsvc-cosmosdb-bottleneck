@@ -19,7 +19,7 @@ var DbConnection = function () {
         connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : "") + "?directConnection=true");
         
         try {
-            let _db = await MongoClient.connect(connectionString);
+            let _db = await MongoClient.connect(connectionString, { useUnifiedTopology: true });
 
             return _db.db(databaseName).collection(collectionName);
         } catch (e) {

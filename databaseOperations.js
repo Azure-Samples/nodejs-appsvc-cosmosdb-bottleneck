@@ -42,7 +42,7 @@ module.exports = {
             };
             
             // Insert some documents
-            mongoClient.insertMany([itemBody], function (err, result) {
+            mongoClient.insert(itemBody, function (err, result) {
                 if (err != null) {
                     errorCallback(err)
                 } else {

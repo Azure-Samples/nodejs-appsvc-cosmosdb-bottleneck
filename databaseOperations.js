@@ -37,7 +37,7 @@ module.exports = {
         .then((mongoClient) => {
             var milliseconds = (new Date).getTime().toString();
             var itemBody = {
-                "id": milliseconds,
+                "id": milliseconds + (Math.random() * 10000).toString(),
                 "page": pageName
             };
             

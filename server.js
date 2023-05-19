@@ -43,10 +43,13 @@ var server = http.createServer(function (req, res) {
             lastTimestamp = Date.now();
             data = dom.serialize();
             utils.writeResponse(res, data);
-            dbOperations.addRecord("index", function(){
-            }, function(error){
-                // utils.writeResponse(res, data);
-            });
+            currentCount++;
+            if(currentCount >= writeToDbEveryNRecords) {
+                dbOperations.addRecord("index", currentCount, function(){
+                }, function(error){
+                    // utils.writeResponse(res, data);
+                });
+            }
         }, function(error){ 
             utils.writeError(res, error);
         });
@@ -54,7 +57,7 @@ var server = http.createServer(function (req, res) {
     else if(!!reqUrl && reqUrl.toLowerCase() == "get" && method == "get") {
         dbOperations.queryCount(function (visitCount){
             // total = visitCount + 1;
-            utils.writeResponse(res, visitCount + 1);
+            utils.writeResponse(res, writeToDbEveryNRecords*visitCount + currentCount);
         }, function(error){
             utils.writeError(res, error);
         });

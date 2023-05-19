@@ -32,15 +32,14 @@ module.exports = {
         })
     },
 
-    addRecord: function (pageName, entries, callback, errorCallback, retry = 2) {
+    addRecord: function (pageName, callback, errorCallback, retry = 2) {
         
         DbConnection.Get()
         .then((mongoClient) => {
             var milliseconds = (new Date).getTime().toString();
             var itemBody = {
                 "id": milliseconds,
-                "page": pageName,
-                "entries": entries
+                "page": pageName
             };
             console.log("Connected correctly to server");
             // Insert some documents

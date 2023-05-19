@@ -25,7 +25,6 @@ module.exports = {
                 if (err != null) {
                     errorCallback(err)
                 } else {
-                    console.log(`Found ${count} records`);
                     callback(count);
                 }
             });

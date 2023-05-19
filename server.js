@@ -81,9 +81,9 @@ var server = http.createServer(function (req, res) {
             entries = parseInt(body) // 'Buy the milk'
             
             currentCount += entries;
+            lastTimestamp = Date.now();
             if(currentCount >= writeToDbEveryNRecords) {
                 dbOperations.addRecord("index", function(){
-                    lastTimestamp = Date.now();
                     utils.writeResponse(res, "added " + entries + " entries")
                     currentCount = 0;
                 }, function(error){

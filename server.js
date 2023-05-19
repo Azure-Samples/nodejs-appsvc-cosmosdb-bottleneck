@@ -84,13 +84,13 @@ var server = http.createServer(function (req, res) {
             if(currentCount >= writeToDbEveryNRecords) {
                 dbOperations.addRecord("index", function(){
                     lastTimestamp = Date.now();
-                    utils.writeResponse(res, "added " + success + " entries")
+                    utils.writeResponse(res, "added " + entries + " entries")
                     currentCount = 0;
                 }, function(error){
-                    utils.writeError(res, "could not add " + success + " entries")
+                    utils.writeError(res, "could not add " + entries + " entries")
                 });
             } else {
-                utils.writeResponse(res, "added " + success + " entries")
+                utils.writeResponse(res, "added " + entries + " entries")
             }
         }) 
     }

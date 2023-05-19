@@ -77,7 +77,6 @@ var server = http.createServer(function (req, res) {
             body += chunk;
         })
         req.on('end', () => {
-            console.log("add request body: " + body)
             entries = parseInt(body) // 'Buy the milk'
             
             currentCount += entries;

@@ -40,7 +40,7 @@ module.exports = {
                 "id": milliseconds,
                 "page": pageName
             };
-            console.log("Connected correctly to server");
+            
             // Insert some documents
             mongoClient.insertMany([itemBody], function (err, result) {
                 if (err != null) {

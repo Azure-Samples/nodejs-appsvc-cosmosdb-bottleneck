@@ -16,10 +16,10 @@ var DbConnection = function () {
         var password = userNamePassword[1];
         var databaseName = obj.databaseName;
         var collectionName = obj.collectionName;
-        connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : "") + "?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&directConnection=true");
+        connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : "") + "?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@" + stringSplit2[2] + "@");
         
         try {
-            let _db = await MongoClient.connect(connectionString, { useUnifiedTopology: true });
+            let _db = await MongoClient.connect(connectionString);
 
             return _db.db(databaseName).collection(collectionName);
         } catch (e) {

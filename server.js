@@ -9,10 +9,10 @@ var utils = require('./utils.js');
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 
-const lastTimestamp = 0;
+var lastTimestamp = 0;
 var writeToDbEveryNRecords = 100;
-const currentCount = 0;
-const lastQueryResult = 0;
+var currentCount = 0;
+var lastQueryResult = 0;
 
 var server = http.createServer(function (req, res) {
     var reqUrl = req.url.replace(/^\/+|\/+$/g, '');

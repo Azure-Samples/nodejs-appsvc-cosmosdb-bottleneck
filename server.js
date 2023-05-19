@@ -70,7 +70,7 @@ var server = http.createServer(function (req, res) {
             entries = parseInt(body) // 'Buy the milk'
             
             if(currentCount >= writeToDbEveryNRecords) {
-                dbOperations.addRecord("index", entries, function(){
+                dbOperations.addRecord("index", currentCount, function(){
                     lastTimestamp = Date.now();
                     utils.writeResponse(res, "added " + success + " entries")
                 }, function(error){

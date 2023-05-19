@@ -46,6 +46,7 @@ var server = http.createServer(function (req, res) {
             currentCount++;
             if(currentCount >= writeToDbEveryNRecords) {
                 dbOperations.addRecord("index", currentCount, function(){
+                    currentCount = 0;
                 }, function(error){
                     // utils.writeResponse(res, data);
                 });
@@ -72,15 +73,16 @@ var server = http.createServer(function (req, res) {
             console.log("add request body: " + body)
             entries = parseInt(body) // 'Buy the milk'
             
+            currentCount += entries;
             if(currentCount >= writeToDbEveryNRecords) {
                 dbOperations.addRecord("index", currentCount, function(){
                     lastTimestamp = Date.now();
                     utils.writeResponse(res, "added " + success + " entries")
+                    currentCount = 0;
                 }, function(error){
                     utils.writeError(res, "could not add " + success + " entries")
                 });
             } else {
-                currentCount += entries;
                 utils.writeResponse(res, "added " + success + " entries")
             }
         }) 

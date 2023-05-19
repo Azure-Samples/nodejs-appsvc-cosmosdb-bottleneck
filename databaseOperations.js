@@ -42,7 +42,7 @@ module.exports = {
             };
             console.log("Connected correctly to server");
             // Insert some documents
-            mongoClient.get.insertMany([itemBody], function (err, result) {
+            mongoClient.insertMany([itemBody], function (err, result) {
                 if (err != null) {
                     errorCallback(err)
                 } else {

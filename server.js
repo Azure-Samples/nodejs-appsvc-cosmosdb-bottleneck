@@ -10,6 +10,9 @@ var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 
 var lastTimestamp = 0;
+var writeToDbEveryNRecords = 100;
+var currentCount = 0;
+
 var server = http.createServer(function (req, res) {
     var reqUrl = req.url.replace(/^\/+|\/+$/g, '');
     var method = req.method.toLowerCase();
@@ -49,52 +52,38 @@ var server = http.createServer(function (req, res) {
         });
     }
     else if(!!reqUrl && reqUrl.toLowerCase() == "get" && method == "get") {
-        setTimeout(() => {
-            dbOperations.queryCount(function (visitCount){
-                // total = visitCount + 1;
-                utils.writeResponse(res, visitCount + 1);
-            }, function(error){
-                utils.writeError(res, error);
-            });
-        }, 10);
+        dbOperations.queryCount(function (visitCount){
+            // total = visitCount + 1;
+            utils.writeResponse(res, visitCount + 1);
+        }, function(error){
+            utils.writeError(res, error);
+        });
     }
     else if(!!reqUrl && reqUrl.toLowerCase() == "add" && method == "post") {
-        setTimeout(() => {
-            let body = "";
-            let entries = 0;
-            req.on('data', chunk => {
-                body += chunk;
-            })
-            req.on('end', () => {
-                console.log("add request body: " + body)
-                entries = parseInt(body) // 'Buy the milk'
-                var counter = 0;
-                var success = 0;
-                console.log(entries)
-                if(entries == 0) {
-                    utils.writeResponse(res, "added " + entries + " entries")
-                }
-                for(let i = 0; i < entries; i++) {
-                    dbOperations.addRecord("index", function(){
-                        lastTimestamp = Date.now();
-                        counter++; success++;
-                        if(counter == entries) {
-                            utils.writeResponse(res, "added " + success + " entries")
-                        }
-                    }, function(error){
-                        counter++;
-                        if(counter == entries) {
-                            utils.writeResponse(res, "added " + success + " entries")
-                        }
-                    });
-                }
-            }) 
-        }, 10);
+        let body = "";
+        let entries = 0;
+        req.on('data', chunk => {
+            body += chunk;
+        })
+        req.on('end', () => {
+            console.log("add request body: " + body)
+            entries = parseInt(body) // 'Buy the milk'
+            
+            if(currentCount >= writeToDbEveryNRecords) {
+                dbOperations.addRecord("index", entries, function(){
+                    lastTimestamp = Date.now();
+                    utils.writeResponse(res, "added " + success + " entries")
+                }, function(error){
+                    utils.writeError(res, "could not add " + success + " entries")
+                });
+            } else {
+                currentCount += entries;
+                utils.writeResponse(res, "added " + success + " entries")
+            }
+        }) 
     }
     else if(reqUrl.toLowerCase() == "lasttimestamp" && method == "get"){
-        setTimeout(() => {
-            utils.writeResponse(res, lastTimestamp);
-        }, 10);
+        utils.writeResponse(res, lastTimestamp);
     }
     else {
         utils.writeResponse(res, "not found");

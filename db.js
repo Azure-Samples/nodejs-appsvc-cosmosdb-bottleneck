@@ -40,7 +40,7 @@ var DbConnection = function () {
 
             if (db != null) {
                 console.log(`db connection is already alive`);
-                db = await DbConnect(); // Bug, remove this line to enable connection pooling
+                //db = await DbConnect(); // Bug, remove this line to enable connection pooling
                 return db;
             } else {
                 console.log(`getting new db connection`);

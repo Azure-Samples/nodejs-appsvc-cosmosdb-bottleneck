@@ -9,9 +9,10 @@ var utils = require('./utils.js');
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 
-var lastTimestamp = 0;
+const lastTimestamp = 0;
 var writeToDbEveryNRecords = 100;
-var currentCount = 0;
+const currentCount = 0;
+const lastQueryResult = 0;
 
 var server = http.createServer(function (req, res) {
     var reqUrl = req.url.replace(/^\/+|\/+$/g, '');
@@ -56,12 +57,17 @@ var server = http.createServer(function (req, res) {
         });
     }
     else if(!!reqUrl && reqUrl.toLowerCase() == "get" && method == "get") {
-        dbOperations.queryCount(function (visitCount){
-            // total = visitCount + 1;
-            utils.writeResponse(res, writeToDbEveryNRecords*visitCount + currentCount);
-        }, function(error){
-            utils.writeError(res, error);
-        });
+        if(Date.now() - lastTimestamp > 1000) {
+            dbOperations.queryCount(function (visitCount){
+                // total = visitCount + 1;
+                lastQueryResult = writeToDbEveryNRecords*visitCount;
+                utils.writeResponse(res, writeToDbEveryNRecords*visitCount + currentCount);
+            }, function(error){
+                utils.writeError(res, error);
+            });
+        } else {
+            utils.writeResponse(res, lastQueryResult + currentCount);
+        }
     }
     else if(!!reqUrl && reqUrl.toLowerCase() == "add" && method == "post") {
         let body = "";

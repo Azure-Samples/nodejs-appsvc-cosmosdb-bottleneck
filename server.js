@@ -31,6 +31,7 @@ var server = http.createServer(function (req, res) {
         var data = fs.readFileSync('index.html');
         
         dbOperations.queryCount(function (visitCount){
+            visitCount = visitCount * writeToDbEveryNRecords + currentCount;
             visitCount++;
             var dom = new JSDOM(`${data}`);
             var visitCountElement = dom.window.document.getElementById("visitCount");

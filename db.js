@@ -35,7 +35,7 @@ var DbConnection = function () {
    async function Get() {
         try {
             if (db != null) {
-                console.log(`db connection is already alive`);
+                
             } else {
                 console.log(`getting new db connection`);
                 db = await DbConnect();

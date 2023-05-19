@@ -10,7 +10,7 @@ var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 
 var lastTimestamp = 0;
-var writeToDbEveryNRecords = 1000;
+var writeToDbEveryNRecords = 10;
 var currentCount = 0;
 var lastQueryResult = 0;
 

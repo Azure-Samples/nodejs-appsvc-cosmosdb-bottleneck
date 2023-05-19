@@ -16,7 +16,7 @@ var DbConnection = function () {
         var password = userNamePassword[1];
         var databaseName = obj.databaseName;
         var collectionName = obj.collectionName;
-        connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : "") + "?directConnection=true&retrywrites=false");
+        connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : "") + "?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&directConnection=true");
         
         try {
             let _db = await MongoClient.connect(connectionString, { useUnifiedTopology: true });

@@ -71,7 +71,7 @@
             "name": "[concat(parameters('webAppName'), '/scm')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_jjchatshacksnewest_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]"
             ],
             "properties": {
                 "allow": "true"
@@ -83,7 +83,7 @@
             "name": "[concat(parameters('webAppName'), '/ftp')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_jjchatshacksnewest_name'))]"
+                "[resourceId('Microsoft.Web/sites', parameters('webAppName'))]"
             ],
             "properties": {
                 "allow": "true"

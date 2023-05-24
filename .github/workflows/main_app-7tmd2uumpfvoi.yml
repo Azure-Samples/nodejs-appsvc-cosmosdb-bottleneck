@@ -37,20 +37,29 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: 'production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: node-app
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID92B4 }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID92B4 }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID92B4 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'app-7tmd2uumpfvoi'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C7E00176728A4506BF6A07F12889ED32 }}
+          slot-name: 'production'
           package: .
+          

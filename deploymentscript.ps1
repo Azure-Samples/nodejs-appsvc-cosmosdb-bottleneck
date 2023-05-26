@@ -1,4 +1,11 @@
-﻿function Get-UrlStatusCode([string] $Url)
+# use commandline parameters in the form of
+# pwsh ./deploymentscript.ps1 subscriptionid mywebapp eastus
+# or via prompt
+$selectedSubscription=$($args[0])
+$deploymentName=$($args[1])
+$location=$($args[2])
+
+function Get-UrlStatusCode([string] $Url)
 {
     try
     {
@@ -13,49 +20,57 @@
 $ErrorActionPreference = "Stop"
 [Console]::ResetColor()
 # az login --use-device-code
-$output = az account show -o json | ConvertFrom-Json
-$subscriptionList = az account list -o json | ConvertFrom-Json 
-$subscriptionList | Format-Table name, id, tenantId -AutoSize
-$selectedSubscription = $output.name
-Write-Host "Currently logged in to subscription """$output.name.Trim()""" in tenant " $output.tenantId
-$selectedSubscription = Read-Host "Enter subscription Id ("$output.id")"
-$selectedSubscription = $selectedSubscription.Trim()
+
 if([string]::IsNullOrWhiteSpace($selectedSubscription)) {
-    $selectedSubscription = $output.id
-} else {
-    # az account set --subscription $selectedSubscription
-    Write-Host "Changed to subscription ("$selectedSubscription")"
-}
-
-while($true) {
-    $deploymentName = Read-Host -Prompt "Enter webapp name"
-    $deploymentName = $deploymentName.Trim()
-    if($deploymentName.ToLower() -match "xbox") {
-        Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
-        continue
-    } elseif ($deploymentName.ToLower() -match "windows") {
-        Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
-        continue
-    } elseif ($deploymentName.ToLower() -match "login") {
-        Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
-        continue
-    } elseif ($deploymentName.ToLower() -match "microsoft") {
-        Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
-        continue
-    }
-    # Create the request
-    $HTTP_Status = Get-UrlStatusCode('http://' + $deploymentName + '.azurewebsites.net')
-    if($HTTP_Status -eq 0) {
-        break
+    $output = az account show -o json | ConvertFrom-Json
+    $subscriptionList = az account list -o json | ConvertFrom-Json 
+    $subscriptionList | Format-Table name, id, tenantId -AutoSize
+    $selectedSubscription = $output.name
+    Write-Host "Currently logged in to subscription """$output.name.Trim()""" in tenant " $output.tenantId
+    $selectedSubscription = Read-Host "Enter subscription Id ("$output.id")"
+    $selectedSubscription = $selectedSubscription.Trim()
+    if([string]::IsNullOrWhiteSpace($selectedSubscription)) {
+        $selectedSubscription = $output.id
     } else {
-        Write-Host "Webapp name taken"
+        # az account set --subscription $selectedSubscription
+        Write-Host "Changed to subscription ("$selectedSubscription")"
     }
 }
 
-$location = Read-Host -Prompt "Enter location (eastus)"
-$location = $location.Trim()
+
+if([string]::IsNullOrWhiteSpace($deploymentName)) {
+    while($true) {
+        $deploymentName = Read-Host -Prompt "Enter webapp name"
+        $deploymentName = $deploymentName.Trim()
+        if($deploymentName.ToLower() -match "xbox") {
+            Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
+            continue
+        } elseif ($deploymentName.ToLower() -match "windows") {
+            Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
+            continue
+        } elseif ($deploymentName.ToLower() -match "login") {
+            Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
+            continue
+        } elseif ($deploymentName.ToLower() -match "microsoft") {
+            Write-Host "Webapp name cannot have keywords xbox,windows,login,microsoft"
+            continue
+        }
+        # Create the request
+        $HTTP_Status = Get-UrlStatusCode('http://' + $deploymentName + '.azurewebsites.net')
+        if($HTTP_Status -eq 0) {
+            break
+        } else {
+            Write-Host "Webapp name taken"
+        }
+    }
+}
+
 if([string]::IsNullOrWhiteSpace($location)) {
-    $location = "eastus"
+    $location = Read-Host -Prompt "Enter location (eastus)"
+    $location = $location.Trim()
+    if([string]::IsNullOrWhiteSpace($location)) {
+        $location = "eastus"
+    }
 }
 
 $resourceGroup = $deploymentName + $location + "-rg"
@@ -99,3 +114,4 @@ while($true) {
         exit
     } 
 }
+

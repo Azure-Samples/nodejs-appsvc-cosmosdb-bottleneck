@@ -15,8 +15,6 @@ var databaseName = obj.databaseName;
 var collectionName = obj.collectionName;
 connectionString = ("mongodb://" + encodeURIComponent(userName) + ":" + encodeURIComponent(password) + "@" + stringSplit2[1] + (stringSplit2.length >= 3 ? ("@" + stringSplit2[2] + "@") : ""));
 
-mongodb://cosmos-4cccskabi6x4k:K0tM4AwlBH2jYcAgUaUtyRp5j0DOuIlFfSgfHSbJpDh7AGyTpj5XdLtyHHIv5ukzxgMKYeDBTt4tACDba3uyUw==@cosmos-4cccskabi6x4k.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@cosmos-4cccskabi6x4k@
-
 module.exports = {
     queryCount: function (callback, errorCallback, retry = 2) { 
         DbConnection.Get()

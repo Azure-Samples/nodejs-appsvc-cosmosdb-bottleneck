@@ -22,6 +22,18 @@
 5. Once deployment is complete, browse to the running sample application with your browser.
 
         https://<app_name>.azurewebsites.net
+
+## **Request limits**
+
+`POST /add` accepts a whole number in the request body and inserts that many records. To prevent a small anonymous request from being amplified into an unbounded number of database operations, the endpoint is bounded by two settings in `config.json`:
+
+| Setting | Default | Description |
+| --- | --- | --- |
+| `maxEntriesPerRequest` | `1000` | Largest number of records a single `POST /add` may insert. Requests outside `0`–`maxEntriesPerRequest`, or with a non-numeric body, are rejected with `400`. |
+| `maxRequestBodyBytes` | `1024` | Largest request body accepted before the connection is dropped with `413`. |
+
+Raise these values deliberately if you need heavier load-test runs; leaving them unbounded exposes the app to resource-exhaustion attacks.
+
 ## **Clean up resources**       
 
 You may want to delete the resources to avoid to continue incurring charges. Use the `az group delete` command to remove the resource group and all related resources.

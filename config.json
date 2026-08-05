@@ -1,3 +1,5 @@
 {
-    "enableSecretsFeature": false
+    "enableSecretsFeature": false,
+    "maxEntriesPerRequest": 1000,
+    "maxRequestBodyBytes": 1024
 }
